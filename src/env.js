@@ -11,7 +11,6 @@ export const env = createEnv({
       AUTH_SECRET:z.string()
   },
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
   },
 
   runtimeEnv: {
@@ -19,7 +18,7 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     API_URL:process.env.API_URL,
     AUTH_SECRET:process.env.AUTH_SECRET
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+   
   },
 
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
