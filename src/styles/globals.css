@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Base colors */
+    --background: 201 100% 98%;     /* Very light shade of blue */
+    --foreground: 201 100% 15%;     /* Dark shade of blue */
+    
+    /* Card colors */
+    --card: 201 100% 98%;          /* Same as background */
+    --card-foreground: 201 100% 15%; /* Same as foreground */
+    
+    /* Popover colors */
+    --popover: 201 100% 98%;       /* Same as background */
+    --popover-foreground: 201 100% 15%; /* Same as foreground */
+    
+    /* Primary colors */
+    --primary: 201 100% 40%;       /* Primary color #0088cc */
+    --primary-foreground: 201 10% 98%; /* Light text for primary */
+    
+    /* Secondary colors - darker shade of primary */
+    --secondary: 201 100% 25%;     /* Darker shade of primary blue */
+    --secondary-foreground: 201 10% 98%; /* Light contrast for secondary */
+    
+    /* Muted colors */
+    --muted: 201 30% 90%;          /* Muted version of primary */
+    --muted-foreground: 201 50% 40%; /* Readable muted text */
+    
+    /* Accent colors - lighter shade of primary */
+    --accent: 201 70% 85%;         /* Light version of primary */
+    --accent-foreground: 201 100% 25%; /* Dark version of primary */
+    
+    /* Destructive colors */
+    --destructive: 0 84% 60%;      /* Keeping red for destructive actions */
+    --destructive-foreground: 0 0% 98%;
+    
+    /* Border and input colors */
+    --border: 201 30% 85%;         /* Light border based on primary */
+    --input: 201 30% 85%;          /* Matching border color */
+    --ring: 201 100% 40%;          /* Using primary for focus rings */
+    
+    /* Chart colors - creating a palette of blues */
+    --chart-1: 201 100% 40%;       /* Primary (#0088cc) */
+    --chart-2: 201 100% 25%;       /* Secondary (darker blue) */
+    --chart-3: 201 70% 60%;        /* Lighter blue */
+    --chart-4: 210 90% 45%;        /* Slightly different blue hue */
+    --chart-5: 220 80% 50%;        /* Another blue variation */
+    
+    --radius: 0.5rem
+  }
+
+  .dark {
+    /* Dark theme - darker and more saturated versions */
+    --background: 201 50% 10%;     /* Dark background */
+    --foreground: 201 30% 90%;     /* Light text */
+    
+    --card: 201 50% 12%;
+    --card-foreground: 201 30% 90%;
+    
+    --popover: 201 50% 12%;
+    --popover-foreground: 201 30% 90%;
+    
+    --primary: 201 100% 40%;       /* Keeping primary consistent */
+    --primary-foreground: 201 10% 98%;
+    
+    --secondary: 201 100% 25%;     /* Keeping secondary consistent */
+    --secondary-foreground: 201 10% 98%;
+    
+    --muted: 201 20% 20%;
+    --muted-foreground: 201 20% 60%;
+    
+    --accent: 201 60% 30%;
+    --accent-foreground: 201 60% 90%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 201 30% 20%;
+    --input: 201 30% 20%;
+    --ring: 201 100% 40%;
+    
+    /* Chart colors - slightly adjusted for dark theme visibility */
+    --chart-1: 201 100% 50%;       /* Brighter primary */
+    --chart-2: 201 100% 30%;       /* Brighter secondary */
+    --chart-3: 201 80% 65%;        /* Brighter lighter blue */
+    --chart-4: 210 90% 50%;        /* Brighter different blue */
+    --chart-5: 220 80% 55%;        /* Brighter blue variation */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
