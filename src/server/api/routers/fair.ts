@@ -5,6 +5,7 @@ import { env } from "~/env";
 import axios, { AxiosError } from "axios";
 import { z } from "zod";
 
+
 export const fairRouter = createTRPCRouter({
  createFairBooking: publicProcedure
   .input(
@@ -169,6 +170,46 @@ export const fairRouter = createTRPCRouter({
       });
     }
   }),
+  findFairByCriteria: publicProcedure
+    .input(
+      z.object({
+        eventLocation: z.string().optional(),
+        eventType: z.string().optional(),
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
+      })
+    )
+    .query(async ({ input }) => {
+      try {
+        const response = await axios.post<
+          ApiResponseProps<FairEventProps[]>
+        >(`${env.API_URL}/fair/find-fair`, input);
+        if (response.data.status === "error") {
+          throw new TRPCError({
+            message: response.data.message ?? "Unknown error",
+            code: "BAD_REQUEST",
+          });
+        }
+        return response.data.data;
+      } catch (error) {
+        if (error instanceof TRPCClientError) {
+          throw new TRPCError({ message: error.message, code: "BAD_REQUEST" });
+        } else if (error instanceof AxiosError) {
+          const data = error.response?.data as
+            | { errors?: string[]; message?: string }
+            | undefined;
+          const message =
+            (Array.isArray(data?.errors) && data?.errors?.[0]) ||
+            data?.message ||
+            "Unknown error";
+          throw new TRPCError({ message, code: "BAD_REQUEST" });
+        }
+        throw new TRPCError({
+          message: "Something went wrong",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
   getFairDetail: publicProcedure
     .input(z.object({ fairId: z.string() }))
     .query(async ({ input }) => {

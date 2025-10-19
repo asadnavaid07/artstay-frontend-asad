@@ -2,8 +2,9 @@ type TraingEducationEnum = "FORMAL" | "NON_FORMAL";
 type CertificationEnum = "NONE" | "PROFESSIONAL" | "TRADE" | "WORKSHOP";
 type RecongnitionEnum = "STATE" | "NATIONAL" | "INTERNATIONAL";
 type ExperienceEnum = "APPRENTICE" | "CRAFTMAN" | "MASTER" | "GRANDMASTER";
+// API Response type for backend communication
 type ApiResponseProps<T> = {
-  status: boolean;
+  status: "success" | "error";
   message: string;
   data: T;
 };
@@ -234,6 +235,18 @@ type FairEventProps = {
   fairId: string;
   createdAt: Date;
   updatedAt: Date;
+  fair?: {
+    fairId: string;
+    firstName: string;
+    lastName: string;
+    dp: string;
+    address: string;
+    description: string;
+    isActive: boolean;
+    accountId: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
 };
 
 type FairDetailProps = {

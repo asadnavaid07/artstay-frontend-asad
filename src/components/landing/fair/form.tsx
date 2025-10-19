@@ -26,11 +26,8 @@ const formSchema = z
   .object({
     eventLocation: z.string().min(1, "Please select an event location"),
     eventType: z.string().min(1, "Please select an event type"),
-    craftTheme: z.string().min(1, "Please select a craft theme"),
     checkIn: z.string().min(1, "Check-in date is required"),
     checkOut: z.string().min(1, "Check-out date is required"),
-    adults: z.number().min(1, "At least one adult is required"),
-    children: z.number().min(0).optional(),
   })
   .refine((data) => new Date(data.checkOut) > new Date(data.checkIn), {
     message: "Check-out date must be after check-in date",
@@ -44,33 +41,19 @@ export const FairForm = () => {
     defaultValues: {
       eventLocation: "",
       eventType: "",
-      craftTheme: "",
       checkIn: "",
       checkOut: "",
-      adults: 1,
-      children: 0,
     },
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    try {
-      console.log("Form submitted:", data);
+    const params = new URLSearchParams();
+    if (data.eventLocation) params.set("eventLocation", data.eventLocation);
+    if (data.eventType) params.set("eventType", data.eventType);
+    if (data.checkIn) params.set("checkIn", data.checkIn);
+    if (data.checkOut) params.set("checkOut", data.checkOut);
 
-      const res = await axios.post<{ status: string; message: string; data?: any }>(
-        `${process.env.NEXT_PUBLIC_API_URL}/fair/find-fair`,
-        data
-      );
-
-      if (res.data.status === "success") {
-        toast({ title: "Success", description: res.data.message });
-      } else if (res.data.status === "error") {
-        toast({ title: "Failed", description: res.data.message, variant: "destructive" });
-        alert(res.data.message);
-      }
-    } catch (error: any) {
-      console.error("Request failed:", error);
-      toast({ title: "Error", description: "Something went wrong", variant: "destructive" });
-    }
+    window.location.href = `/fair?${params.toString()}`;
   };
 
   return (
@@ -136,37 +119,6 @@ export const FairForm = () => {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="craftTheme"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-gray-600">Craft Focus Area*</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="– Select Craft Theme –" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="papier-mache">Papier-Mâché</SelectItem>
-                    <SelectItem value="pashmina-kani">Pashmina / Kani</SelectItem>
-                    <SelectItem value="walnut-wood">Walnut Wood</SelectItem>
-                    <SelectItem value="copperware-metalwork">Copperware / Metalwork</SelectItem>
-                    <SelectItem value="zari-embroidery">Zari / Embroidery</SelectItem>
-                    <SelectItem value="gabba-namda">Gabba / Namda</SelectItem>
-                    <SelectItem value="jewelry-boutique">Jewelry / Boutique</SelectItem>
-                    <SelectItem value="sufi-art-calligraphy">Sufi Art & Calligraphy</SelectItem>
-                    <SelectItem value="innovative-crafts">Innovative Crafts</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
           <div className="grid grid-cols-2 gap-4">
             <FormField

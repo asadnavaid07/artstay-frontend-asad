@@ -81,11 +81,14 @@ export const safariRouter = createTRPCRouter({
 
   getSafariDetail: publicProcedure
     .input(z.object({ safariId: z.string() }))
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       try {
+        console.log('getSafariDetail called with:', input);
+        console.log('Context session:', ctx.session);
         const response = await axios.get<ApiResponseProps<SafariDetailProps>>(
           `${env.API_URL}/safari/${input.safariId}`,
         );
+        console.log('Backend response:', response.data);
         return response.data.data;
       } catch (error) {
         if (error instanceof TRPCClientError) {
@@ -131,8 +134,10 @@ export const safariRouter = createTRPCRouter({
         safariId: z.string(),
       }),
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       try {
+        console.log('createSafariBooking called with:', input);
+        console.log('Context session:', ctx.session);
         await axios.post<ApiResponseProps<null>>(
           `${env.API_URL}/safari/create-booking`,
           input,

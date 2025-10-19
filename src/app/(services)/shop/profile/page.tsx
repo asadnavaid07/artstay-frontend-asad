@@ -88,7 +88,7 @@ export default async function ShopPage({ searchParams }: PageProps) {
         <div className="flex gap-2">
           <div className="relative -mt-[14rem] h-[15rem] w-[15rem] overflow-hidden rounded-lg shadow-lg">
             <Image
-              src={shop.dp}
+              src={shop.dp && shop.dp !== "none" ? shop.dp : "/placeholder-shop.svg"}
               alt="Profile photo"
               priority
               className="rounded-lg object-cover"

@@ -27,12 +27,12 @@ export const SafariLanding = () => {
 
             This initiative is not tourism for entertainment. It&apos;s tourism for preservation. 
           </p>
-          <p>Beyond thread and timber lies a truth that each artisan carries a silent library of memory. On these trails, you don&apos;t just see creation, you feel inheritance. The Craft Safari is a pilgrimage to skill, sweat, and ancestral knowing, where generations of wisdom flow through skilled hands.</p>
+          {/* <p>Beyond thread and timber lies a truth that each artisan carries a silent library of memory. On these trails, you don&apos;t just see creation, you feel inheritance. The Craft Safari is a pilgrimage to skill, sweat, and ancestral knowing, where generations of wisdom flow through skilled hands.</p>
           <p>Every Safari educates visitors, uplifts artisan families, and ensures that Kashmir&apos;s cultural legacy is celebrated, not commercialized. Through authentic experiences and meaningful connections, we preserve these timeless traditions.
 
             By choosing Kashmir Craft Safari, travelers don&apos;t just visit Kashmir. They become part of its craft revival, economic dignity, and global recognition.</p>
           
-          <p>Craft is not a souvenir. It is a soul. <br /> Come witness the making of both.</p>
+          <p>Craft is not a souvenir. It is a soul. <br /> Come witness the making of both.</p> */}
           
         </div>
         <div className="col-span-2 grid gap-6 md:gap-8">

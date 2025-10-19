@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "~/components/ui/tabs";
 import { Checkbox } from "~/components/ui/checkbox";
@@ -11,75 +11,87 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 // Define the filter form values type
 export type SafariFilterValues = {
-  checkIn: string;
-  checkOut: string;
-  rating: number[];
+  craftVillages: string[];
+  features: string[];
 };
 
 export const SafariFilter = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState("dates");
+  const [activeTab, setActiveTab] = useState("villages");
 
   // Set up react-hook-form
   const { control, handleSubmit, watch, setValue } = useForm<SafariFilterValues>({
     defaultValues: {
-      checkIn: "",
-      checkOut: "",
-      rating: [5, 4, 3, 2, 1], // Default all checked
+      craftVillages: [],
+      features: [],
     },
   });
 
   // Initialize form with URL params if any
   useEffect(() => {
     if (searchParams) {
-      const checkIn = searchParams.get("checkIn") ?? "";
-      const checkOut = searchParams.get("checkOut") ?? "";
-      const rating = searchParams.get("rating")?.split(",").map(Number) ?? [5, 4, 3, 2, 1];
+      const craftVillages = searchParams.get("craftVillages")?.split(",") ?? [];
+      const features = searchParams.get("features")?.split(",") ?? [];
 
-      setValue("checkIn", checkIn);
-      setValue("checkOut", checkOut);
-      setValue("rating", rating);
+      setValue("craftVillages", craftVillages);
+      setValue("features", features);
     }
   }, [searchParams, setValue]);
 
-  // Type-safe checkbox change handler
-  const handleCheckboxChange = (value: number) => {
-    const currentValues = watch("rating");
-    const valueExists = currentValues.includes(value);
+  // Get current values
+  const craftVillages = watch("craftVillages");
+  const features = watch("features");
+
+  // Type-safe checkbox change handler for craft villages
+  const handleCraftVillageChange = (value: string, checked: boolean) => {
+    console.log("Craft village change:", value, checked, craftVillages);
     
-    // Toggle the value
-    if (valueExists) {
-      setValue("rating", currentValues.filter(v => v !== value));
+    if (checked) {
+      setValue("craftVillages", [...craftVillages, value]);
     } else {
-      setValue("rating", [...currentValues, value]);
+      setValue("craftVillages", craftVillages.filter(v => v !== value));
+    }
+  };
+
+  // Type-safe checkbox change handler for features
+  const handleFeatureChange = (value: string, checked: boolean) => {
+    console.log("Feature change:", value, checked, features);
+    
+    if (checked) {
+      setValue("features", [...features, value]);
+    } else {
+      setValue("features", features.filter(v => v !== value));
     }
   };
 
   const onSubmit = (data: SafariFilterValues) => {
+    console.log("Form submitted with data:", data);
+    
     // Create new URLSearchParams
     const params = new URLSearchParams();
     
     // Only add non-empty values to the URL
-    if (data.checkIn) params.set("checkIn", data.checkIn);
-    if (data.checkOut) params.set("checkOut", data.checkOut);
-    if (data.rating.length) params.set("rating", data.rating.join(","));
+    if (data.craftVillages.length) params.set("craftVillages", data.craftVillages.join(","));
+    if (data.features.length) params.set("features", data.features.join(","));
 
+    console.log("URL params:", params.toString());
+    
     // Update URL with filter params
     router.push(`${pathname}?${params.toString()}`);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="-mt-24">
+    <form onSubmit={handleSubmit(onSubmit)} className="-mt-24 relative z-10">
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="flex h-auto flex-wrap gap-2 bg-transparent p-0">
+        <TabsList className="flex h-auto flex-wrap gap-2 bg-transparent p-0 relative z-20">
           <div className="rounded-b-none rounded-t-lg bg-secondary px-4 py-2 font-text text-lg text-white z-[101] p-3">
             <b>SAFARI EXPERIENCES</b>
           </div>
           {[
-            { id: "dates", label: "Dates" },
-            { id: "rating", label: "Rating" },
+            { id: "villages", label: "Craft Villages" },
+            { id: "features", label: "Features" },
           ].map((tab) => (
             <TabsTrigger
               key={tab.id}
@@ -91,59 +103,46 @@ export const SafariFilter = () => {
             </TabsTrigger>
           ))}
         </TabsList>
-        <div className="rounded-lg bg-white/90 p-6 shadow-lg backdrop-blur">
-          <TabsContent value="dates">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <div>
-                <label className="mb-2 block">Check in</label>
-                <Controller
-                  name="checkIn"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      type="date"
-                      placeholder="yyyy-mm-dd"
-                      value={field.value}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </div>
-
-              <div>
-                <label className="mb-2 block">Check out</label>
-                <Controller
-                  name="checkOut"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      type="date"
-                      placeholder="yyyy-mm-dd"
-                      value={field.value}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </div>
+        <div className="rounded-lg bg-white/90 p-6 shadow-lg backdrop-blur relative z-10">
+          <TabsContent value="villages" className="space-y-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {[
+                { id: "Khanqah & Zadibal", label: "Khanqah & Zadibal" },
+                { id: "Safakadal & Eidgah", label: "Safakadal & Eidgah" },
+                { id: "Raniwari, Kathi Darwaza", label: "Raniwari, Kathi Darwaza" },
+                { id: "Nallah Mar & Amda Kadal", label: "Nallah Mar & Amda Kadal" },
+                { id: "Aali Kadal", label: "Aali Kadal" },
+                { id: "Kanihama", label: "Kanihama" },
+                { id: "Zainakote", label: "Zainakote" },
+                { id: "Kakapora", label: "Kakapora" },
+              ].map((village) => (
+                <div key={village.id} className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded">
+                  <Checkbox
+                    id={`village-${village.id}`}
+                    checked={craftVillages.includes(village.id)}
+                    onCheckedChange={(checked) => handleCraftVillageChange(village.id, checked as boolean)}
+                  />
+                  <label htmlFor={`village-${village.id}`} className="text-sm cursor-pointer flex-1">{village.label}</label>
+                </div>
+              ))}
             </div>
           </TabsContent>
 
-          <TabsContent value="rating" className="space-y-4">
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
-              {[5, 4, 3, 2, 1].map((stars) => (
-                <div key={stars} className="flex items-center gap-2">
-                  <Controller
-                    name="rating"
-                    control={control}
-                    render={({ field }) => (
-                      <Checkbox
-                        id={`${stars}stars`}
-                        checked={field.value.includes(stars)}
-                        onCheckedChange={() => handleCheckboxChange(stars)}
-                      />
-                    )}
+          <TabsContent value="features" className="space-y-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {[
+                { id: "Live Artisan Demonstrations", label: "Live Artisan Demonstrations" },
+                { id: "Hands-on Craft Participation", label: "Hands-on Craft Participation" },
+                { id: "Artisan Interviews & Story Sessions", label: "Artisan Interviews & Story Sessions" },
+                { id: "Ethical Shopping", label: "Ethical Shopping" },
+              ].map((feature) => (
+                <div key={feature.id} className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded">
+                  <Checkbox
+                    id={`feature-${feature.id}`}
+                    checked={features.includes(feature.id)}
+                    onCheckedChange={(checked) => handleFeatureChange(feature.id, checked as boolean)}
                   />
-                  <label htmlFor={`${stars}stars`}>{stars} Stars</label>
+                  <label htmlFor={`feature-${feature.id}`} className="text-sm cursor-pointer flex-1">{feature.label}</label>
                 </div>
               ))}
             </div>

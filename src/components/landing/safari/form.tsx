@@ -22,109 +22,131 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import axios from "axios";
 import { useToast } from "~/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 const destinations = [
   {
-    id: "khanqah",
+    id: "Khanqah & Zadibal",
     label: "Khanqah & Zadibal",
     description: "Woodwork, papier-mâché, sozni embroidery traditions",
   },
   {
-    id: "safakadal",
+    id: "Safakadal & Eidgah",
     label: "Safakadal & Eidgah",
     description: "Chain-stitch, aari embroidery in motion",
   },
   {
-    id: "raniwari",
+    id: "Raniwari, Kathi Darwaza",
     label: "Raniwari, Kathi Darwaza",
     description: "Pottery, Walnut Woodcarvings, Pashmina dyeing.",
   },
   {
-    id: "nallah",
+    id: "Nallah Mar & Amda Kadal",
     label: "Nallah Mar & Amda Kadal",
     description: "Zari, namda, copperware artisan brilliance",
   },
   {
-    id: "aali",
+    id: "Aali Kadal",
     label: "Aali Kadal",
     description: "Pashmina dyeing, zari, copperware excellence",
   },
   {
-    id: "kanihama",
+    id: "Kanihama",
     label: "Kanihama",
     description: "Kani shawls woven with coded needles",
   },
   {
-    id: "zainakote",
+    id: "Zainakote",
     label: "Zainakote",
     description: "Zari embroidery and silver-thread craftsmanship",
   },
   {
-    id: "kakapora",
+    id: "Kakapora",
     label: "Kakapora",
     description: "Gabba felting, crewel embroidery, wool artistry",
   },
 ];
 
-const formSchema = z
-  .object({
-    destinations: z
-      .array(z.string())
-      .min(1, "Please select at least one destination"),
-    activityPreferences: z
-      .string({
-        required_error: "Please select an activity preference",
-      })
-      .min(1, "Please select at least one activity preference"),
-    timeSlot: z
-      .string({
-        required_error: "Please select a time slot",
-      })
-      .min(1, "Please select a time slot"),
-    checkIn: z.string().min(1, "Check-in date is required"),
-    checkOut: z.string().min(1, "Check-out date is required"),
-    adults: z.number().min(1, "At least one adult is required"),
-    children: z.number().min(0).optional(),
-  })
-  .refine((data) => new Date(data.checkOut) > new Date(data.checkIn), {
-    message: "Check-out date must be after check-in date",
-    path: ["checkOut"],
-  });
+const formSchema = z.object({
+  title: z
+    .string({
+      required_error: "Please select a destination",
+    })
+    .min(1, "Please select a destination"),
+  activityPreferences: z
+    .array(z.string())
+    .min(1, "Please select at least one activity preference"),
+  duration: z
+    .string({
+      required_error: "Please select a time slot",
+    })
+    .min(1, "Please select a time slot"),
+});
 
 export const SafariForm = () => {
   const { toast } = useToast();
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      destinations: [],
-      activityPreferences: "",
-      timeSlot: "",
-      checkIn: "",
-      checkOut: "",
-      adults: 1,
-      children: 0,
+      title: "",
+      activityPreferences: [],
+      duration: ""
     },
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log("Form submitted:", data);
+    console.log("Activity preferences type:", typeof data.activityPreferences);
+    console.log("Activity preferences value:", data.activityPreferences);
+    console.log("Is array:", Array.isArray(data.activityPreferences));
+    
+    // Ensure activityPreferences is always an array and title is a string
+    const processedData = {
+      ...data,
+      title: data.title,
+      activityPreferences: Array.isArray(data.activityPreferences) 
+        ? data.activityPreferences 
+        : data.activityPreferences ? [data.activityPreferences] : []
+    };
+    
+    console.log("Processed data:", processedData);
+    
     try {
-      console.log("Form submitted:", data);
-
       const res = await axios.post<{ status: string; message: string; data?: any }>(
-        `${process.env.NEXT_PUBLIC_API_URL}/safari/find-safari`,
-        data
+        `http://localhost:5015/api/v1/safari/find-safari`,
+        processedData
       );
 
+
       if (res.data.status === "success") {
-        toast({ title: "Success", description: res.data.message });
+        toast({ 
+          title: "Success", 
+          description: res.data.message || "Safari tours found successfully!" 
+        });
+        
+        // Redirect to the first found safari profile
+        if (res.data.data && res.data.data.length > 0) {
+          const firstSafari = res.data.data[0];
+          router.push(`/safari/profile?safariId=${firstSafari.safariId}`);
+        }
+        
+        console.log("Found safaris:", res.data.data);
       } else if (res.data.status === "error") {
-        toast({ title: "Failed", description: res.data.message, variant: "destructive" });
-        alert(res.data.message);
+        toast({ 
+          title: "No Tours Found", 
+          description: res.data.message || "No safari tours found for the selected destinations", 
+          variant: "destructive" 
+        });
       }
     } catch (error: any) {
       console.error("Request failed:", error);
-      toast({ title: "Error", description: "Something went wrong", variant: "destructive" });
+      const errorMessage = error.response?.data?.message || "Failed to search for safari tours. Please try again.";
+      toast({ 
+        title: "Error", 
+        description: errorMessage, 
+        variant: "destructive" 
+      });
     }
   };
 
@@ -139,183 +161,110 @@ export const SafariForm = () => {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 p-6">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-600">Select Craft Village to Visit</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a craft village" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {destinations.map((destination) => (
+                      <SelectItem key={destination.id} value={destination.id}>
+                        <div>
+                          <div className="font-medium">{destination.label}</div>
+                          <div className="text-sm text-gray-500">{destination.description}</div>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <div>
             <FormLabel className="mb-3 block text-gray-600">
-              Select Craft Villages to Visit (Choose all that apply)
+              Activity Preferences (Choose all that apply)
             </FormLabel>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {destinations.map((destination) => (
-                <div key={destination.id} className="space-y-2">
-                  <div className="flex items-start space-x-2">
-                    <Checkbox
-                      id={destination.id}
-                      onCheckedChange={(checked) => {
-                        const current = form.getValues("destinations");
-                        if (checked) {
-                          form.setValue("destinations", [
-                            ...current,
-                            destination.id,
-                          ]);
-                        } else {
-                          form.setValue(
-                            "destinations",
-                            current.filter((id) => id !== destination.id),
-                          );
-                        }
-                      }}
-                    />
-                    <label
-                      htmlFor={destination.id}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {destination.label}
-                    </label>
-                  </div>
-                  <p className="ml-6 text-sm text-gray-500">
-                    {destination.description}
-                  </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {[
+                { id: "Live Artisan Demonstrations", label: "Live Artisan Demonstrations" },
+                { id: "Hands-on Craft Participation", label: "Hands-on Craft Participation" },
+                { id: "Artisan Interviews & Story Sessions", label: "Artisan Interviews & Story Sessions" },
+                { id: "Ethical Shopping", label: "Ethical Shopping" },
+              ].map((preference) => (
+                <div key={preference.id} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={preference.id}
+                    checked={form.watch("activityPreferences").includes(preference.id)}
+                    onCheckedChange={(checked) => {
+                      const current = form.getValues("activityPreferences");
+                      console.log("Checkbox changed:", preference.id, "checked:", checked);
+                      console.log("Current value:", current, "type:", typeof current);
+                      
+                      if (checked) {
+                        const newValue = [...current, preference.id];
+                        console.log("Setting new value:", newValue);
+                        form.setValue("activityPreferences", newValue);
+                      } else {
+                        const newValue = current.filter((id) => id !== preference.id);
+                        console.log("Removing, new value:", newValue);
+                        form.setValue("activityPreferences", newValue);
+                      }
+                      // Trigger validation
+                      form.trigger("activityPreferences");
+                    }}
+                  />
+                  <label
+                    htmlFor={preference.id}
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    {preference.label}
+                  </label>
                 </div>
               ))}
             </div>
-            <FormMessage />
+            {form.formState.errors.activityPreferences && (
+              <p className="text-sm text-red-500 mt-1">
+                {form.formState.errors.activityPreferences.message}
+              </p>
+            )}
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="activityPreferences"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-600">Activity Preferences</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="– Select Activity Preferences –" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent style={{
-                      zIndex: 100
-                    }}>
-                      <SelectItem value="liveArtisan">Live Artisan Demonstrations</SelectItem>
-                      <SelectItem value="craftParticipation">Hands-on Craft Participation</SelectItem>
-                      <SelectItem value="artisanInterviews">Artisan Interviews & Story Sessions</SelectItem>
-                      <SelectItem value="ethicalShopping">Ethical Shopping</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="timeSlot"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-600">Preferred Time Slot</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="– Select Time Slot –" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="morning">Morning</SelectItem>
-                      <SelectItem value="afternoon">Afternoon</SelectItem>
-                      <SelectItem value="fullDay">Full Day</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="checkIn"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Check In</FormLabel>
+          <FormField
+            control={form.control}
+            name="duration"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-600">Preferred Time Slot</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
-                    <Input type="date" {...field} className="w-full" />
+                    <SelectTrigger>
+                      <SelectValue placeholder="– Select Time Slot –" />
+                    </SelectTrigger>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                  <SelectContent>
+                    <SelectItem value="Morning,10AM- 4PM">Morning (10AM-4PM)</SelectItem>
+                    <SelectItem value="Afternoon,2PM- 6PM">Afternoon (2PM-6PM)</SelectItem>
+                    <SelectItem value="Full Day,9AM- 6PM">Full Day (9AM-6PM)</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="checkOut"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Check Out</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} className="w-full" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="adults"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Adult</FormLabel>
-                  <FormControl>
-                    <select
-                      className="w-full rounded-md border p-2"
-                      {...field}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
-                    >
-                      {[1, 2, 3, 4, 5].map((num) => (
-                        <option key={num} value={num}>
-                          {num}
-                        </option>
-                      ))}
-                    </select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="children"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Children</FormLabel>
-                  <FormControl>
-                    <select
-                      className="w-full rounded-md border p-2"
-                      {...field}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
-                    >
-                      {[0, 1, 2, 3, 4, 5].map((num) => (
-                        <option key={num} value={num}>
-                          {num}
-                        </option>
-                      ))}
-                    </select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
 
           <Button type="submit" className="w-full">FIND NOW</Button>
         </form>

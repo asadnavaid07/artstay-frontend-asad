@@ -21,8 +21,6 @@ import { api } from "~/trpc/react";
 export type ArtisanFilterValues = {
   craft: string;
   subCraft: string;
-  checkIn: string;
-  checkOut: string;
   rating: number[];
   expertise: string[];
   education: string;
@@ -42,8 +40,6 @@ export const ArtisanFilter = () => {
     defaultValues: {
       craft: "",
       subCraft: "",
-      checkIn: "",
-      checkOut: "",
       rating: [5, 4, 3, 2, 1], 
       expertise: ["GRANDMASTER", "MASTER", "CRAFTMAN", "APPRENTICE"],
       education: "",
@@ -70,8 +66,6 @@ export const ArtisanFilter = () => {
     if (searchParams) {
       const craft = searchParams.get("craft") ?? "";
       const subCraft = searchParams.get("subCraft") ?? "";
-      const checkIn = searchParams.get("checkIn") ?? "";
-      const checkOut = searchParams.get("checkOut") ?? "";
       const rating = searchParams.get("rating")?.split(",").map(Number) ?? [5, 4, 3, 2, 1];
       const expertise = searchParams.get("expertise")?.split(",") ?? 
         ["GRANDMASTER", "MASTER", "CRAFTMAN", "APPRENTICE"]; // Updated to uppercase
@@ -82,8 +76,6 @@ export const ArtisanFilter = () => {
 
       setValue("craft", craft);
       setValue("subCraft", subCraft);
-      setValue("checkIn", checkIn);
-      setValue("checkOut", checkOut);
       setValue("rating", rating);
       setValue("expertise", expertise);
       setValue("education", education);
@@ -124,8 +116,6 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
     // Only add non-empty values to the URL
     if (data.craft) params.set("craft", data.craft);
     if (data.subCraft) params.set("subCraft", data.subCraft);
-    if (data.checkIn) params.set("checkIn", data.checkIn);
-    if (data.checkOut) params.set("checkOut", data.checkOut);
     if (data.rating.length) params.set("rating", data.rating.join(","));
     if (data.expertise.length) params.set("expertise", data.expertise.join(","));
     if (data.education) params.set("education", data.education);
@@ -217,34 +207,47 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
                 />
               </div>
 
+              {/* Experience (maps to expertise) */}
               <div>
-                <label className="mb-2 block">Check in</label>
+                <label className="mb-2 block">Experience</label>
                 <Controller
-                  name="checkIn"
+                  name="expertise"
                   control={control}
                   render={({ field }) => (
-                    <Input
-                      type="date"
-                      placeholder="yyyy-mm-dd"
-                      value={field.value}
-                      onChange={field.onChange}
-                    />
+                    <Select
+                      value={Array.isArray(field.value) ? (field.value[0] ?? "") : ""}
+                      onValueChange={(val) => setValue("expertise", val ? [val] : [])}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="-- Select Experience --" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="GRANDMASTER">Grandmaster</SelectItem>
+                        <SelectItem value="MASTER">Master Craftsman</SelectItem>
+                        <SelectItem value="CRAFTMAN">Craftsman</SelectItem>
+                        <SelectItem value="APPRENTICE">Apprentice</SelectItem>
+                      </SelectContent>
+                    </Select>
                   )}
                 />
               </div>
 
+              {/* Education */}
               <div>
-                <label className="mb-2 block">Check out</label>
+                <label className="mb-2 block">Education</label>
                 <Controller
-                  name="checkOut"
+                  name="education"
                   control={control}
                   render={({ field }) => (
-                    <Input
-                      type="date"
-                      placeholder="yyyy-mm-dd"
-                      value={field.value}
-                      onChange={field.onChange}
-                    />
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="-- Select Education --" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="FORMAL">Formal</SelectItem>
+                        <SelectItem value="NON_FORMAL">Non-Formal</SelectItem>
+                      </SelectContent>
+                    </Select>
                   )}
                 />
               </div>

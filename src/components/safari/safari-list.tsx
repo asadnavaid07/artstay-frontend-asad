@@ -13,10 +13,12 @@ export const SafariList = () => {
   const searchParams = useSearchParams();
   
   // Extract filter values from search params
-  const checkInFilter = searchParams.get("checkIn");
-  const checkOutFilter = searchParams.get("checkOut");
-  const ratingFilter = useMemo(() => 
-    searchParams.get("rating")?.split(",").map(Number) ?? [], 
+  const craftVillagesFilter = useMemo(() => 
+    searchParams.get("craftVillages")?.split(",") ?? [], 
+    [searchParams]
+  );
+  const featuresFilter = useMemo(() => 
+    searchParams.get("features")?.split(",") ?? [], 
     [searchParams]
   );
 
@@ -26,33 +28,51 @@ export const SafariList = () => {
   // Apply filters to safaris
   const filteredSafaris = useMemo(() => {
     // If no filters are applied, return all safaris
-    if (!checkInFilter && !checkOutFilter && ratingFilter.length === 0) {
+    if (craftVillagesFilter.length === 0 && featuresFilter.length === 0) {
       return safaris;
     }
 
-    return safaris.filter((_safari) => {
-      // For demo purposes, we're not implementing actual date filtering 
-      // since SafariTour model would be needed for availability checks
-      // In a real app, you'd check safari tour availability based on dates
-      
-      // Apply rating filter if any
-      // Note: Since the safari model doesn't have ratings in your schema,
-      // this is a placeholder. In a real app, you'd check against actual ratings.
-      if (ratingFilter.length > 0) {
-        // Placeholder for rating filter - in a real implementation you would
-        // check against actual safari ratings if they exist
-        // const safariRating = safari.rating ?? 5;
-        // return ratingFilter.includes(Math.floor(safariRating));
-        
-        // Since we don't have ratings in the model, we'll just pass this filter
-        // Remove this in a real implementation and use the code above
-        return true;
+    return safaris.filter((safari) => {
+      // Check if safari has tours that match the filter criteria
+      if (!safari.SafariTour || safari.SafariTour.length === 0) {
+        return false;
       }
-      
-      // If passed all filters
+
+      // Check craft villages filter
+      if (craftVillagesFilter.length > 0) {
+        const hasMatchingVillage = safari.SafariTour.some(tour => {
+          return craftVillagesFilter.some(village => {
+            // Handle combined village names like "Khanqah & Zadibal"
+            if (village.includes('&')) {
+              const villageParts = village.split('&').map(part => part.trim().toLowerCase());
+              return villageParts.some(part => tour.title.toLowerCase().includes(part));
+            } else if (village.includes(',')) {
+              const villageParts = village.split(',').map(part => part.trim().toLowerCase());
+              return villageParts.some(part => tour.title.toLowerCase().includes(part));
+            } else {
+              return tour.title.toLowerCase().includes(village.toLowerCase());
+            }
+          });
+        });
+        if (!hasMatchingVillage) return false;
+      }
+
+      // Check features filter (activity preferences)
+      if (featuresFilter.length > 0) {
+        const hasMatchingFeature = safari.SafariTour.some(tour => {
+          return featuresFilter.some(feature => {
+            // Check if any tour feature contains the selected activity preference
+            return tour.features.some(tourFeature => 
+              tourFeature.toLowerCase().includes(feature.toLowerCase())
+            );
+          });
+        });
+        if (!hasMatchingFeature) return false;
+      }
+
       return true;
     });
-  }, [safaris, checkInFilter, checkOutFilter, ratingFilter]);
+  }, [safaris, craftVillagesFilter, featuresFilter]);
 
   return (
     <div className="px-4 py-8">

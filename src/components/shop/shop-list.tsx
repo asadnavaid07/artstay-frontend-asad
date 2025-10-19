@@ -129,7 +129,7 @@ export const ShopList = () => {
           <div className="relative">
             <div className="relative h-60 overflow-hidden">
               <Image
-                src={shop.dp || "/placeholder-shop.jpg"}
+                src={shop.dp && shop.dp !== "none" ? shop.dp : "/placeholder-shop.svg"}
                 alt={shop.shopName}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-110"

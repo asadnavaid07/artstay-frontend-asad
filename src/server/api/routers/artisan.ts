@@ -46,39 +46,74 @@ export const artisanRouter = createTRPCRouter({
   }),
   ///
   getArtisanBookings: publicProcedure
-  .input(z.object({ accountId: z.string() }))
-  .query(async ({ input }) => {
-    try {
-      const response = await axios.get<ApiResponseProps<{ artisanBookingId: string; startDate: string; endDate: string; status: string; packageId: string; bookingDetailId: string }[]>>(
-        `${env.API_URL}/artisan/bookings/${input.accountId}`,
-      );
-      return response.data.data;
-    } catch (error) {
-      if (error instanceof TRPCClientError) {
-        console.error(error.message);
+    .input(z.object({ accountId: z.string() }))
+    .query(async ({ input }) => {
+      try {
+        const response = await axios.get<ApiResponseProps<{ artisanBookingId: string; startDate: string; endDate: string; status: string; packageId: string; bookingDetailId: string }[]>>(
+          `${env.API_URL}/artisan/bookings/${input.accountId}`,
+        );
+        return response.data.data;
+      } catch (error) {
+        if (error instanceof TRPCClientError) {
+          console.error(error.message);
+          throw new TRPCError({
+            message: error.message,
+            code: "NOT_FOUND",
+          });
+        } else if (error instanceof AxiosError) {
+          const axiosError = error as AxiosError<{ errors: string[] }>;
+          console.error(axiosError.response?.data.errors);
+          throw new TRPCError({
+            message:
+              Array.isArray((error.response?.data as { errors: string[] }).errors) &&
+              typeof (error.response?.data as { errors: string[] }).errors[0] === "string"
+                ? (error.response?.data as { errors: string[] }).errors[0]
+                : "Unknown error",
+            code: "BAD_REQUEST",
+          });
+        }
+        console.error(error);
         throw new TRPCError({
-          message: error.message,
-          code: "NOT_FOUND",
-        });
-      } else if (error instanceof AxiosError) {
-        const axiosError = error as AxiosError<{ errors: string[] }>;
-        console.error(axiosError.response?.data.errors);
-        throw new TRPCError({
-          message:
-            Array.isArray((error.response?.data as { errors: string[] }).errors) &&
-            typeof (error.response?.data as { errors: string[] }).errors[0] === "string"
-              ? (error.response?.data as { errors: string[] }).errors[0]
-              : "Unknown error",
-          code: "BAD_REQUEST",
+          message: "Something went wrong",
+          code: "INTERNAL_SERVER_ERROR",
         });
       }
-      console.error(error);
-      throw new TRPCError({
-        message: "Something went wrong",
-        code: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }),
+    }),
+
+  getArtisanBookedDates: publicProcedure
+    .input(z.object({ artisanId: z.string() }))
+    .query(async ({ input }) => {
+      try {
+        const response = await axios.get<ApiResponseProps<{ startDate: string; endDate: string }[]>>(
+          `${env.API_URL}/artisan/booked-dates/${input.artisanId}`,
+        );
+        return response.data.data;
+      } catch (error) {
+        if (error instanceof TRPCClientError) {
+          console.error(error.message);
+          throw new TRPCError({
+            message: error.message,
+            code: "NOT_FOUND",
+          });
+        } else if (error instanceof AxiosError) {
+          const axiosError = error as AxiosError<{ errors: string[] }>;
+          console.error(axiosError.response?.data.errors);
+          throw new TRPCError({
+            message:
+              Array.isArray((error.response?.data as { errors: string[] }).errors) &&
+              typeof (error.response?.data as { errors: string[] }).errors[0] === "string"
+                ? (error.response?.data as { errors: string[] }).errors[0]
+                : "Unknown error",
+            code: "BAD_REQUEST",
+          });
+        }
+        console.error(error);
+        throw new TRPCError({
+          message: "Something went wrong",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
   ///
 
   getAllArtisans: publicProcedure.query(async () => {

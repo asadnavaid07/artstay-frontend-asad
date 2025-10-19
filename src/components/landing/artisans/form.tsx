@@ -219,117 +219,98 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import axios from "axios";
 import { useToast } from "~/hooks/use-toast";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
-// Define the validation schema
-const formSchema = z
-  .object({
-    craft: z
-      .string({
-        required_error: "Please select a craft",
-      })
-      .min(1, "Please select a craft"),
-    subCraft: z
-      .string({
-        required_error: "Please select a sub craft",
-      })
-      .min(1, "Please select a sub craft"),
-    checkIn: z
-      .string({
-        required_error: "Check-in date is required",
-      })
-      .refine((date) => {
-        if (!date) return false;
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        return new Date(date) >= today;
-      }, "Check-in date must be today or later"),
-    checkOut: z
-      .string({
-        required_error: "Check-out date is required",
-      })
-      .refine((date) => {
-        if (!date) return false;
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        return new Date(date) >= today;
-      }, "Check-out date must be today or later"),
-    experienceGoals: z
-      .string({
-        required_error: "Please select an experience goal",
-      })
-      .min(1, "Please select an experience goal"),
-    travelType: z
-      .string({
-        required_error: "Please select a travel type",
-      })
-      .min(1, "Please select a travel type"),
-  })
-  .refine(
-    (data) => {
-      return new Date(data.checkOut) > new Date(data.checkIn);
-    },
-    {
-      message: "Check-out date must be after check-in date",
-      path: ["checkOut"],
-    },
-  );
+// Define the validation schema (no dates, add DB-backed filters)
+const formSchema = z.object({
+  craft: z.string({ required_error: "Please select a craft" }).min(1),
+  subCraft: z.string({ required_error: "Please select a sub craft" }).min(1),
+  experienceGoals: z.string().optional(), // static dummy; we won't submit it
+  experience: z
+    .string({ required_error: "Please select craft experience" })
+    .min(1, "Please select craft experience"),
+  education: z.string().optional(),
+  training: z.string().optional(),
+});
 
 export const ArtisanForm = () => {
   const { toast } = useToast();
+  const router = useRouter();
+
+  // Local state for crafts and sub-crafts
+  const [crafts, setCrafts] = useState<Array<{ craftId: string; craftName: string }>>([]);
+  const [subCrafts, setSubCrafts] = useState<Array<{ subCraftId: string; subCraftName: string }>>([]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       craft: "",
       subCraft: "",
-      checkIn: "",
-      checkOut: "",
       experienceGoals: "",
-      travelType: "",
+      experience: "",
+      education: "",
+      training: "",
     },
   });
 
+  // Fetch crafts on mount
+  useEffect(() => {
+    const fetchCrafts = async () => {
+      try {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/craft`);
+        if (res.data?.status === "success") {
+          setCrafts(res.data.data ?? []);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchCrafts();
+  }, []);
+
+  // When craft changes, fetch sub crafts
+  useEffect(() => {
+    const subscription = form.watch(async (values, { name }) => {
+      if (name === "craft") {
+        try {
+          const craftId = values.craft;
+          form.setValue("subCraft", "");
+          if (!craftId) {
+            setSubCrafts([]);
+            return;
+          }
+          const res = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_URL}/craft/sub-craft/${craftId}`
+          );
+          if (res.data?.status === "success") {
+            setSubCrafts(res.data.data ?? []);
+          }
+        } catch (err) {
+          console.error(err);
+          setSubCrafts([]);
+        }
+      }
+    });
+    return () => subscription.unsubscribe?.();
+  }, [form]);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      console.log("Form submitted:", data);
+      // Build search params; exclude goals
+      const params = new URLSearchParams();
+      if (data.craft) params.set("craft", data.craft);
+      if (data.subCraft) params.set("subCraft", data.subCraft);
+      if (data.experience) params.set("expertise", data.experience);
+      if (data.education) params.set("education", data.education);
+      if (data.training) params.set("training", data.training);
 
-      const res = await axios.post<{ status: string; message: string; data?: any }>(
-        `${process.env.NEXT_PUBLIC_API_URL}/artisan/find-artisan`,
-        data
-      );
-
-      if (res.data.status === "success") {
-        toast({ title: "Success", description: res.data.message });
-      } 
-
-      if (res.data.status === "error") {
-        throw new Error(res.data.message); // force catch
-      }
-      
-    } catch (error: any) {
-      if (axios.isAxiosError(error)) {
-        // API responded with error (like 400, 404, 500, etc.)
-        const apiMessage = error.response?.data?.message || "API request failed";
-        console.error("Axios error:", error.response?.data || error.message);
-
-        toast({
-          title: "Error",
-          description: apiMessage,
-          variant: "destructive",
-        });
-      } else {
-        // Some other unexpected error
-        console.error("Unexpected error:", error);
-        toast({
-          title: "Error",
-          description: "Unexpected error occurred",
-          variant: "destructive",
-        });
-      }
+      router.push(`/artisan?${params.toString()}`);
+    } catch (error) {
+      console.error(error);
+      toast({ title: "Error", description: "Failed to apply filters", variant: "destructive" });
     }
-
   };
-
 
   return (
     <div className="z-[100] -mt-16 col-span-2 lg:col-span-1 flex max-w-lg flex-col gap-3 rounded-lg bg-white shadow-xl">
@@ -352,19 +333,18 @@ export const ArtisanForm = () => {
                 <FormLabel className="text-gray-600">
                   Craft Workshops You&apos;re Interested In
                 </FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Boutique Craft" />
+                      <SelectValue placeholder="– Select Craft –" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent style={{
-                    zIndex: 100
-                  }}>
-                    <SelectItem value="boutique">Boutique Craft</SelectItem>
+                  <SelectContent style={{ zIndex: 100 }}>
+                    {crafts.map((c) => (
+                      <SelectItem key={c.craftId} value={c.craftId}>
+                        {c.craftName}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -380,21 +360,18 @@ export const ArtisanForm = () => {
                 <FormLabel className="text-gray-600">
                   Sub Workshops You&apos;re Interested In
                 </FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-
-                >
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="– Select Sub Craft –" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent style={{
-                    zIndex: 100
-                  }}>
-                    <SelectItem value="sub1">Sub Craft 1</SelectItem>
-                    <SelectItem value="sub2">Sub Craft 2</SelectItem>
+                  <SelectContent style={{ zIndex: 100 }}>
+                    {subCrafts.map((s) => (
+                      <SelectItem key={s.subCraftId} value={s.subCraftId}>
+                        {s.subCraftName}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -409,18 +386,13 @@ export const ArtisanForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-gray-600">Goals</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="– Select Goal –" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent style={{
-                      zIndex: 100
-                    }}>
+                    <SelectContent style={{ zIndex: 100 }}>
                       <SelectItem value="learning">Learning a new skill</SelectItem>
                       <SelectItem value="heritage">Preserving ancestral heritage</SelectItem>
                       <SelectItem value="cultural">Cultural immersion</SelectItem>
@@ -435,26 +407,21 @@ export const ArtisanForm = () => {
 
             <FormField
               control={form.control}
-              name="travelType"
+              name="experience"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-600">Travel Alone or in Groups</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <FormLabel className="text-gray-600">Craft Experience</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="– Select Travel Type –" />
+                        <SelectValue placeholder="– Select Experience –" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent style={{
-                      zIndex: 100
-                    }}>
-                      <SelectItem value="solo">Solo</SelectItem>
-                      <SelectItem value="couple">Couple</SelectItem>
-                      <SelectItem value="family">Family</SelectItem>
-                      <SelectItem value="group">Group</SelectItem>
+                    <SelectContent style={{ zIndex: 100 }}>
+                      <SelectItem value="APPRENTICE">Apprentice</SelectItem>
+                      <SelectItem value="CRAFTMAN">Craftsman</SelectItem>
+                      <SelectItem value="MASTER">Master</SelectItem>
+                      <SelectItem value="GRANDMASTER">Grandmaster</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -466,17 +433,21 @@ export const ArtisanForm = () => {
           <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
-              name="checkIn"
+              name="education"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-600">Check In</FormLabel>
-                  <FormControl>
-                    <input
-                      type="date"
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      {...field}
-                    />
-                  </FormControl>
+                  <FormLabel className="text-gray-600">Education</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="– Select Education –" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent style={{ zIndex: 100 }}>
+                      <SelectItem value="FORMAL">Formal</SelectItem>
+                      <SelectItem value="NON_FORMAL">Non-Formal</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -484,22 +455,28 @@ export const ArtisanForm = () => {
 
             <FormField
               control={form.control}
-              name="checkOut"
+              name="training"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-600">Check Out</FormLabel>
-                  <FormControl>
-                    <input
-                      type="date"
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      {...field}
-                    />
-                  </FormControl>
+                  <FormLabel className="text-gray-600">Training</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="– Select Training –" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent style={{ zIndex: 100 }}>
+                      <SelectItem value="FORMAL">Formal</SelectItem>
+                      <SelectItem value="NON_FORMAL">Non-Formal</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+
+          {/* Dates removed as requested */}
 
           <Button type="submit" >FIND ARTISAN</Button>
         </form>

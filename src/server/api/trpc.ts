@@ -7,6 +7,7 @@ import { auth } from "~/server/auth";
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
   const session = await auth();
+  console.log('[auth][details]:', session);
   return {
     session,
     ...opts,

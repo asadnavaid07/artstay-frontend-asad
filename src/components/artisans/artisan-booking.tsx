@@ -83,9 +83,15 @@ export const ArtisanBookingForm = () => {
         </p>
         <Button
           className="mt-4"
-          onClick={() => router.push("/artisans/packages")}
+          onClick={() => {
+            if (artisanPackage.artisanId) {
+              router.push(`/artisan/profile?artisanId=${artisanPackage.artisanId}`);
+            } else {
+              router.push("/artisan");
+            }
+          }}
         >
-          Browse Packages
+          {artisanPackage.artisanId ? "Back to Artisan Profile" : "Browse Artisans"}
         </Button>
       </div>
     );
@@ -112,10 +118,23 @@ export const ArtisanBookingForm = () => {
       <div className="md:col-span-2">
         <Card>
           <CardHeader>
-            <CardTitle>Complete Your Booking</CardTitle>
-            <CardDescription>
-              Please fill in your details to book your artisan experience.
-            </CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Complete Your Booking</CardTitle>
+                <CardDescription>
+                  Please fill in your details to book your artisan experience.
+                </CardDescription>
+              </div>
+              {artisanPackage.artisanId && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => router.push(`/artisan/profile?artisanId=${artisanPackage.artisanId}`)}
+                >
+                  Back to Profile
+                </Button>
+              )}
+            </div>
           </CardHeader>
           <CardContent>
             <Form {...form}>

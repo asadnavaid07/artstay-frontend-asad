@@ -8,7 +8,8 @@ import weekday from "dayjs/plugin/weekday";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import { usePackage } from "~/hooks/use-artisan";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { api } from "~/trpc/react";
 
 dayjs.extend(isBetween);
 dayjs.extend(weekday);
@@ -32,8 +33,71 @@ const weekDays: readonly string[] = [
 
 export const ArtisanCalendar = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
   const { artisanPackage, setPackage } = usePackage();
+  
+  const artisanId = searchParams.get("artisanId");
+  
+  // Debug logging
+  console.log("ArtisanCalendar Debug:", {
+    artisanPackage,
+    artisanId,
+    hasPackage: !!artisanPackage.id,
+    duration: artisanPackage.duration
+  });
+  
+  // Fetch booked dates for this artisan
+  const { data: bookedDates = [], error: bookedDatesError, isLoading: bookedDatesLoading } = api.artisan.getArtisanBookedDates.useQuery(
+    { artisanId: artisanId ?? "" },
+    { enabled: !!artisanId }
+  );
+
+  // Debug logging for booked dates
+  console.log("Booked dates debug:", {
+    artisanId,
+    bookedDates,
+    bookedDatesError,
+    bookedDatesLoading
+  });
+
+  // Check if a date is booked
+  const isDateBooked = (date: Dayjs): boolean => {
+    return bookedDates.some(booked => {
+      const startDate = dayjs(booked.startDate);
+      const endDate = dayjs(booked.endDate);
+      return date.isBetween(startDate, endDate, "day", "[]");
+    });
+  };
+
+  // Get the reason why a date is disabled
+  const getDateDisabledReason = (date: Dayjs): string => {
+    if (date.isBefore(dayjs(), "day")) {
+      return "Past date";
+    }
+    if (isDateBooked(date)) {
+      return "Already booked";
+    }
+    const endDateForDuration = date.add((artisanPackage.duration || 1) - 1, "day");
+    if (!isDateRangeAvailable(date, endDateForDuration)) {
+      return "Duration not available";
+    }
+    return "";
+  };
+
+  // Check if a date range is available (not overlapping with any booked dates)
+  const isDateRangeAvailable = (startDate: Dayjs, endDate: Dayjs): boolean => {
+    let currentDate = startDate;
+    while (currentDate.isSameOrBefore(endDate, "day")) {
+      if (isDateBooked(currentDate)) {
+        console.log("Date range not available - booked date found:", currentDate.format("YYYY-MM-DD"));
+        return false;
+      }
+      currentDate = currentDate.add(1, "day");
+    }
+    console.log("Date range available:", startDate.format("YYYY-MM-DD"), "to", endDate.format("YYYY-MM-DD"));
+    return true;
+  };
 
   const generateCalendarDays = (date: Dayjs): CalendarDay[] => {
     const firstDayOfMonth = date.startOf("month");
@@ -55,10 +119,22 @@ export const ArtisanCalendar = () => {
     // Current month's days
     for (let i = 1; i <= daysInMonth; i++) {
       const currentDayDate = firstDayOfMonth.add(i - 1, "day");
+      
+      // Calculate the end date for the package duration
+      const endDateForDuration = currentDayDate.add((artisanPackage.duration || 1) - 1, "day");
+      
+      // Disable if:
+      // 1. Date is before today
+      // 2. Date is booked
+      // 3. The full duration period is not available
+      const isDisabled = currentDayDate.isBefore(currentDate, "day") || 
+                        isDateBooked(currentDayDate) || 
+                        !isDateRangeAvailable(currentDayDate, endDateForDuration);
+      
       days.push({
         date: currentDayDate,
         isCurrentMonth: true,
-        isDisabled: currentDayDate.isBefore(currentDate, "day"), // Disable if date is before today
+        isDisabled: isDisabled,
       });
     }
 
@@ -80,12 +156,23 @@ export const ArtisanCalendar = () => {
     if (day.isDisabled) return;
 
     const startDate = day.date;
-    const endDate = startDate.add(artisanPackage.duration - 1, "day");
+    const duration = artisanPackage.duration || 1;
+    const endDate = startDate.add(duration - 1, "day");
 
-    setPackage({
+    console.log("Date clicked:", {
       startDate: startDate.format("YYYY-MM-DD"),
       endDate: endDate.format("YYYY-MM-DD"),
+      duration,
+      isAvailable: isDateRangeAvailable(startDate, endDate)
     });
+
+    // Check if the entire duration range is available
+    if (isDateRangeAvailable(startDate, endDate)) {
+      setPackage({
+        startDate: startDate.format("YYYY-MM-DD"),
+        endDate: endDate.format("YYYY-MM-DD"),
+      });
+    }
   };
 
   const isDateInRange = (date: Dayjs): boolean => {
@@ -108,9 +195,16 @@ export const ArtisanCalendar = () => {
 
   const renderCalendarMonth = (date: Dayjs) => (
     <div className="w-full">
-      <h2 className="mb-4 text-center font-heading text-base font-extrabold text-gray-900">
-        {date.format("MMMM YYYY")}
-      </h2>
+      <div className="mb-4 text-center">
+        <h2 className="font-heading text-base font-extrabold text-gray-900">
+          {date.format("MMMM YYYY")}
+        </h2>
+        {artisanPackage.duration && artisanPackage.duration > 0 && (
+          <p className="text-xs text-gray-500 mt-1">
+            Select any date for {artisanPackage.duration} day{artisanPackage.duration > 1 ? 's' : ''} period
+          </p>
+        )}
+      </div>
       <div className="grid grid-cols-7 gap-1">
         {weekDays.map((day) => (
           <div
@@ -124,6 +218,8 @@ export const ArtisanCalendar = () => {
         {generateCalendarDays(date).map((day, index) => {
           const isInRange = isDateInRange(day.date);
           const isSelected = isDateSelected(day.date);
+          const isBooked = isDateBooked(day.date);
+          const disabledReason = getDateDisabledReason(day.date);
 
           return (
             <Button
@@ -132,9 +228,33 @@ export const ArtisanCalendar = () => {
               onClick={() => handleDateClick(day)}
               disabled={day.isDisabled}
               variant={isSelected || isInRange ? "default" : "outline"}
-              className="h-[5rem] w-[5rem]"
+              className={`h-[5rem] w-[5rem] relative ${
+                day.isDisabled 
+                  ? "opacity-50 cursor-not-allowed" 
+                  : "hover:bg-primary/10"
+              } ${
+                isInRange 
+                  ? "bg-primary text-primary-foreground" 
+                  : ""
+              } ${
+                isBooked
+                  ? "bg-red-100 text-red-600 border-red-300"
+                  : ""
+              }`}
+              title={day.isDisabled ? disabledReason : ""}
             >
-              {day.date.date()}
+              <div className="flex flex-col items-center">
+                <span className="text-sm font-medium">{day.date.date()}</span>
+                {isSelected && (
+                  <span className="text-xs opacity-75">Start</span>
+                )}
+                {isInRange && !isSelected && (
+                  <span className="text-xs opacity-75">Part</span>
+                )}
+                {isBooked && (
+                  <span className="text-xs text-red-600 font-bold">Booked</span>
+                )}
+              </div>
             </Button>
           );
         })}
@@ -142,8 +262,65 @@ export const ArtisanCalendar = () => {
     </div>
   );
 
+  // Don't render calendar if no package is selected
+  if (!artisanPackage.id || !artisanPackage.duration) {
+    return (
+      <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
+        <p className="text-sm text-amber-800">
+          Please select a learning package first to view available dates.
+        </p>
+        <div className="mt-2 text-xs text-amber-600">
+          Debug: Package ID: {artisanPackage.id || 'none'}, Duration: {artisanPackage.duration || 'none'}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
+      {/* Show booked dates summary */}
+      {bookedDates.length > 0 && (
+        <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-3">
+          <p className="text-sm text-amber-800 font-medium">
+            Booked Periods ({bookedDates.length}):
+          </p>
+          <div className="mt-2 space-y-1">
+            {bookedDates.slice(0, 3).map((booking, index) => (
+              <div key={index} className="text-xs text-amber-700">
+                {dayjs(booking.startDate).format("MMM D")} - {dayjs(booking.endDate).format("MMM D, YYYY")}
+              </div>
+            ))}
+            {bookedDates.length > 3 && (
+              <div className="text-xs text-amber-600">
+                +{bookedDates.length - 3} more periods...
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {!artisanPackage.startDate && (
+        <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4">
+          <p className="text-sm text-blue-800">
+            Click on any available date to select your {artisanPackage.duration} day{artisanPackage.duration > 1 ? 's' : ''} period.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-4 text-xs">
+            <div className="flex items-center gap-2">
+              <div className="h-3 w-3 rounded border bg-white"></div>
+              <span>Available</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-3 w-3 rounded border bg-red-100 border-red-300"></div>
+              <span>Booked</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-3 w-3 rounded border bg-gray-100 opacity-50"></div>
+              <span>Unavailable</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       {artisanPackage.startDate && (
         <div className="mt-4 space-y-2 rounded-lg border bg-secondary/5 p-4">
           <div className="flex items-center justify-between text-sm">
