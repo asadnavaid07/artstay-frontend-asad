@@ -270,7 +270,7 @@ export const CraftDocumentorRegistrationStatus = () => {
                 {/* Expertise Tags */}
                 {documentorData.specialization && documentorData.specialization.length > 0 && (
                   <div className="mt-3 flex flex-wrap justify-center gap-2 lg:justify-start">
-                    {documentorData.specialization.map((expertise, index) => (
+                    {documentorData.specialization.map((expertise: string, index: number) => (
                       <Badge
                         key={index}
                         variant="secondary"
@@ -351,7 +351,7 @@ export const CraftDocumentorRegistrationStatus = () => {
                       Lnaguage Support
                     </p>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {documentorData.languages?.map((item, index) => (
+                      {documentorData.languages?.map((item: string, index: number) => (
                         <Badge key={index} variant="outline">
                           <User className="mr-1 h-3 w-3" />
                           {item}
@@ -365,7 +365,7 @@ export const CraftDocumentorRegistrationStatus = () => {
                       Craft support
                     </p>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {documentorData.craftFocusAreas?.map((style, index) => (
+                      {documentorData.craftFocusAreas?.map((style: string, index: number) => (
                         <Badge key={index} variant="secondary">
                           <Film className="mr-1 h-3 w-3" />
                           {style}

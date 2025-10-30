@@ -4,6 +4,7 @@ import { TRPCClientError } from "@trpc/client";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { env } from "~/env";
+import type { ApiResponseProps, ShopProps, ShopPaginationProps, ShopFilterOptionsProps, ShopDetailProps } from "~/types";
 
 export const shopRouter = createTRPCRouter({
   getApplicationStatus: protectedProcedure.query(async ({ ctx }) => {

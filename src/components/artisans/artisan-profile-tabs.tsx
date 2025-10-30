@@ -24,10 +24,11 @@ import {
   getRecognitionString,
   getTrainingString,
 } from "~/lib/utils";
-import type { ArtisanDetailProps } from "~/types";
+import type { ArtisanPortolioProps, ExperienceEnum, TraingEducationEnum, CertificationEnum, RecongnitionEnum } from "~/types";
+
 
 interface ArtisanProfileTabsProps {
-  artisan: ArtisanDetailProps;
+  artisan: ArtisanPortolioProps & { specialization?: string[]; craftFocusAreas?: string[] };
 }
 
 export const ArtisanProfileTabs = ({ artisan }: ArtisanProfileTabsProps) => {
@@ -107,7 +108,7 @@ export const ArtisanProfileTabs = ({ artisan }: ArtisanProfileTabsProps) => {
                   <div>
                     <h3 className="text-lg font-semibold">Experience</h3>
                     <p className="text-sm text-white/80">
-                      {getExperienceString(artisan.experience)}
+                      {getExperienceString(artisan.experience as ExperienceEnum)}
                     </p>
                   </div>
                 </div>
@@ -117,7 +118,7 @@ export const ArtisanProfileTabs = ({ artisan }: ArtisanProfileTabsProps) => {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold">Location</h3>
-                    <p className="text-sm text-white/80">{artisan.location}</p>
+                    <p className="text-sm text-white/80">{artisan.address}</p>
                   </div>
                 </div>
               </div>
@@ -130,7 +131,7 @@ export const ArtisanProfileTabs = ({ artisan }: ArtisanProfileTabsProps) => {
                   <div>
                     <h3 className="text-lg font-semibold">Education</h3>
                     <p className="text-sm text-white/80">
-                      {getEducationString(artisan.education)}
+                      {getEducationString(artisan.education as TraingEducationEnum)}
                     </p>
                   </div>
                 </div>
@@ -141,7 +142,7 @@ export const ArtisanProfileTabs = ({ artisan }: ArtisanProfileTabsProps) => {
                   <div>
                     <h3 className="text-lg font-semibold">Training</h3>
                     <p className="text-sm text-white/80">
-                      {getTrainingString(artisan.training)}
+                      {getTrainingString(artisan.training as TraingEducationEnum)}
                     </p>
                   </div>
                 </div>
@@ -155,7 +156,7 @@ export const ArtisanProfileTabs = ({ artisan }: ArtisanProfileTabsProps) => {
                   <div>
                     <h3 className="text-lg font-semibold">Certification</h3>
                     <p className="text-sm text-white/80">
-                      {getCertificateString(artisan.certification)}
+                      {getCertificateString(artisan.certificate as CertificationEnum)}
                     </p>
                   </div>
                 </div>
@@ -166,7 +167,7 @@ export const ArtisanProfileTabs = ({ artisan }: ArtisanProfileTabsProps) => {
                   <div>
                     <h3 className="text-lg font-semibold">Recognition</h3>
                     <p className="text-sm text-white/80">
-                      {getRecognitionString(artisan.recognition)}
+                      {getRecognitionString(artisan.recongnition as RecongnitionEnum)}
                     </p>
                   </div>
                 </div>

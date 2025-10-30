@@ -8,6 +8,7 @@ import { EcoTransitPackage } from "~/components/eco-transit/package-list";
 import { EcoTransitCalendar } from "~/components/eco-transit/booking/eco-transit-calendar";
 import { useSearchParams as useClientSearchParams } from "next/navigation";
 import React from "react";
+import type { EcoTransitDetailProps, EcoTransitOptionProps } from "~/types";
 
 // Mock data (replace with tRPC query later)
 const mockTransit: EcoTransitDetailProps = {

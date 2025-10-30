@@ -7,7 +7,7 @@ import { Badge } from "~/components/ui/badge";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Card } from "~/components/ui/card";
 import { MapPin } from "lucide-react";
-
+import type { FairEventProps } from "~/types";
 
 export const FairList = () => {
   const router = useRouter();
@@ -32,7 +32,7 @@ export const FairList = () => {
   return (
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4">
         {filteredFairs.length > 0 ? (
-          filteredFairs.map((fairEvent, index) => (
+          filteredFairs.map((fairEvent: FairEventProps, index: number) => (
             <Card
               key={fairEvent.eventId ?? index}
               className="cursor-pointer overflow-hidden bg-white transition-shadow duration-300 hover:shadow-md"

@@ -4,6 +4,7 @@ import { TRPCError } from "@trpc/server";
 import { env } from "~/env";
 import axios, { AxiosError } from "axios";
 import { z } from "zod";
+import type { ApiResponseProps, SafariProps, SafariDetailProps } from "~/types";
 
 export const safariRouter = createTRPCRouter({
   getApplicationStatus: publicProcedure.query(async ({ ctx }) => {

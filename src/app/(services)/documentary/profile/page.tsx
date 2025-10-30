@@ -14,6 +14,7 @@ import {
 import { HeadlingUnderline } from "~/components/common/heading-underline";
 import { DocumentorPackageCard } from "~/components/documentary/documentor-card";
 import { DocumentorPortfolio } from "~/components/documentary/documentr-portfolio";
+import type { DocumentorDetailProps } from "~/types";
 
 
 type PageProps = {

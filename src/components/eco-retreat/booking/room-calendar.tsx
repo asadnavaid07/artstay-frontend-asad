@@ -10,6 +10,7 @@ import { useRoom } from "~/hooks/use-room";
 import { useState, useCallback, useMemo, useEffect } from "react";
 import React, { memo } from "react";
 import { useRouter } from "next/navigation";
+import type { RoomProps } from "~/types";
 
 dayjs.extend(isBetween);
 
@@ -256,7 +257,7 @@ export const RoomCalendar = ({ room }: ComponentProps) => {
   const getPrice = useCallback(
     (date: dayjs.Dayjs): number => {
       if (pricesData.data?.roomprices) {
-        const priceEntry = pricesData.data.roomprices.find((data) =>
+        const priceEntry = pricesData.data.roomprices.find((data: BlockDateProps) =>
           date.isBetween(
             dayjs(data.startDate),
             dayjs(data.endDate),

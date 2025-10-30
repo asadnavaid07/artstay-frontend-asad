@@ -28,6 +28,8 @@ const formSchema = z
     eventType: z.string().min(1, "Please select an event type"),
     checkIn: z.string().min(1, "Check-in date is required"),
     checkOut: z.string().min(1, "Check-out date is required"),
+    adults: z.number().int().min(1, "At least 1 adult"),
+    children: z.number().int().min(0, "Children cannot be negative"),
   })
   .refine((data) => new Date(data.checkOut) > new Date(data.checkIn), {
     message: "Check-out date must be after check-in date",
@@ -43,6 +45,8 @@ export const FairForm = () => {
       eventType: "",
       checkIn: "",
       checkOut: "",
+      adults: 1,
+      children: 0,
     },
   });
 

@@ -1,6 +1,7 @@
 import { Calendar, CheckCircle2 } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import { SafariBook } from "~/components/safari/booking/safari-book";
+import type { SafariTourProps } from "~/types";
 
 export const SafariPackage = ({ tour }: { tour: SafariTourProps }) => {
   return (

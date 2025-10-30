@@ -2,6 +2,7 @@
 
 import { useSafari } from "~/hooks/use-safari";
 import { Button } from "~/components/ui/button";
+import type { SafariTourProps } from "~/types";
 
 interface BookNowButtonProps {
   tour: SafariTourProps;

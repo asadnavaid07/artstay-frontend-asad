@@ -4,6 +4,7 @@ import { TRPCError } from "@trpc/server";
 import { env } from "~/env";
 import axios, { AxiosError } from "axios";
 import { z } from "zod";
+import type { ApiResponseProps, EcoTransitDetailProps, EcoTransitOptionProps, EcoTransitBooking, EcoTransitProps } from "~/types";
 
 export const ecoTransitRouter = createTRPCRouter({
   getEcoTransitDetail: publicProcedure

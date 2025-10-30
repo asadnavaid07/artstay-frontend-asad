@@ -288,7 +288,7 @@ export const LanguageServiceRegistrationStatus = () => {
                 {languageData.languages &&
                   languageData.languages.length > 0 && (
                     <div className="mt-3 flex flex-wrap justify-center gap-2 lg:justify-start">
-                      {languageData.languages.map((lang, index) => (
+                      {languageData.languages.map((lang: string, index: number) => (
                         <Badge
                           key={index}
                           variant="secondary"
@@ -305,7 +305,7 @@ export const LanguageServiceRegistrationStatus = () => {
                 {languageData.serviceMode &&
                   languageData.serviceMode.length > 0 && (
                     <div className="mt-2 flex flex-wrap justify-center gap-2 lg:justify-start">
-                      {languageData.serviceMode.map((mode, index) => (
+                      {languageData.serviceMode.map((mode: string, index: number) => (
                         <Badge
                           key={index}
                           variant="outline"
@@ -444,7 +444,7 @@ export const LanguageServiceRegistrationStatus = () => {
                         Availability
                       </p>
                       <div className="mt-1 flex flex-wrap gap-1">
-                        {languageData.availability?.map((day, index) => (
+                        {languageData.availability?.map((day: string, index: number) => (
                           <Badge
                             key={index}
                             variant="outline"
@@ -473,7 +473,7 @@ export const LanguageServiceRegistrationStatus = () => {
                     </p>
                     <div className="mt-2 flex flex-wrap gap-2">
                       {languageData.specialization?.map(
-                        (spec, index) => (
+                        (spec: string, index: number) => (
                           <Badge key={index} variant="secondary">
                             {spec}
                           </Badge>
@@ -487,7 +487,7 @@ export const LanguageServiceRegistrationStatus = () => {
                       Certifications
                     </p>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {languageData.certification?.map((cert, index) => (
+                      {languageData.certification?.map((cert: string, index: number) => (
                         <Badge key={index} variant="outline">
                           <Award className="mr-1 h-3 w-3" />
                           {cert}
@@ -516,7 +516,7 @@ export const LanguageServiceRegistrationStatus = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-2 gap-4">
-                        {languageData.portfolio.map((item, index) => (
+                        {languageData.portfolio.map((item: string, index: number) => (
                           <div
                             key={index}
                             className="relative aspect-video overflow-hidden rounded-lg border"

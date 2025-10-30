@@ -17,6 +17,7 @@ import {
 import { HeadlingUnderline } from "~/components/common/heading-underline";
 import { Badge } from "~/components/ui/badge";
 import { LanguageServiceBook } from "~/components/language/booking/book-now";
+import type { LanguageServiceProps } from "~/types";
 
 type PageProps = {
   searchParams: Promise<{ serviceId: string }>;

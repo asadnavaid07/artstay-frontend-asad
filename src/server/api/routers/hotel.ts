@@ -3,6 +3,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { env } from "~/env";
 import axios, { AxiosError } from "axios";
+import type { ApiResponseProps, HotelProps } from "~/types";
 
 export const hotelRouter = createTRPCRouter({
   getApplicationStatus: protectedProcedure.query(async ({ ctx }) => {

@@ -1,6 +1,7 @@
 'use client'
 import { useState } from "react";
 import Image from "next/image";
+import type { DocumentorPortfolioProps } from "~/types";
 export const DocumentorPortfolio = ({ portfolio }: { portfolio: DocumentorPortfolioProps }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 

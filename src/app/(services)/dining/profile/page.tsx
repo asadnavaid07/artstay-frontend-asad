@@ -4,6 +4,7 @@ import Image from "next/image";
 import { MapPin, Star, Utensils, Clock } from "lucide-react";
 import { HeadlingUnderline } from "~/components/common/heading-underline";
 import { DiningMenu } from "~/components/dining/booking/dining-menu";
+import type { RestaurantDetailProps } from "~/types";
 
 
 type MenuCategory = "STARTER" | "MAIN_COURSE" | "DESSERT" | "BEVERAGE";
@@ -22,19 +23,6 @@ type RestaurantMenuProps = {
   restaurantId: string;
   createdAt: Date;
   updatedAt: Date;
-};
-
-type RestaurantDetailProps = {
-  restaurantId: string;
-  name: string;
-  description: string;
-  location: string;
-  cuisine: string[];
-  priceRange: string;
-  image: string;
-  createdAt: Date;
-  updatedAt: Date;
-  menu: RestaurantMenuProps[];
 };
 
 type PageProps = {

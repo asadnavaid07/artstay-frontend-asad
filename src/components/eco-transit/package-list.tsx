@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Calendar, CheckCircle2 } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import { EcoTransitBook } from "~/components/eco-transit/booking/eco-transit-book";
+import type { EcoTransitOptionProps } from "~/types";
 
 interface DistanceMatrixResponse {
   rows?: Array<{

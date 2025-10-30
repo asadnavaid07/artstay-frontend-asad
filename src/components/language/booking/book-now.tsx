@@ -2,6 +2,7 @@
 
 import { Button } from "~/components/ui/button";
 import { useLanguageService } from "~/hooks/use-language";
+import type { LanguageServiceProps } from "~/types";
 
 interface LanguageServiceBookProps {
   service: LanguageServiceProps;

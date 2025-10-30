@@ -169,7 +169,7 @@ export const DocumentorFilter = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none" disabled>All Languages</SelectItem>
-                        {filterOptions.languages.map((language) => (
+                        {filterOptions.languages.map((language: string) => (
                           <SelectItem key={language} value={language}>
                             {language}
                           </SelectItem>
@@ -201,7 +201,7 @@ export const DocumentorFilter = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none" disabled>All Specializations</SelectItem>
-                        {filterOptions.specializations.map((specialization) => (
+                        {filterOptions.specializations.map((specialization: string) => (
                           <SelectItem key={specialization} value={specialization}>
                             {specialization}
                           </SelectItem>
@@ -229,7 +229,7 @@ export const DocumentorFilter = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none" disabled>All Craft Areas</SelectItem>
-                        {filterOptions.craftFocusAreas.map((area) => (
+                        {filterOptions.craftFocusAreas.map((area: string) => (
                           <SelectItem key={area} value={area}>
                             {area}
                           </SelectItem>
@@ -261,7 +261,7 @@ export const DocumentorFilter = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none" disabled>All Package Types</SelectItem>
-                        {filterOptions.packageTypes.map((packageType) => (
+                        {filterOptions.packageTypes.map((packageType: string) => (
                           <SelectItem key={packageType} value={packageType}>
                             {packageType}
                           </SelectItem>
@@ -289,7 +289,7 @@ export const DocumentorFilter = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none" disabled>All Price Ranges</SelectItem>
-                        {filterOptions.priceRanges.map((range) => (
+                        {filterOptions.priceRanges.map((range: string) => (
                           <SelectItem key={range} value={range}>
                             {range}
                           </SelectItem>

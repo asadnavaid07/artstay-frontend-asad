@@ -12,6 +12,7 @@ import {
   Package,
 } from "lucide-react";
 import dayjs from "dayjs";
+import type { RestaurantProps } from "~/types";
 
 const getPriceRangeSymbol = (priceRange: string) => {
   switch (priceRange) {
@@ -49,7 +50,7 @@ export const RestaurantList = () => {
       return restaurants;
     }
 
-    return restaurants.filter((restaurant) => {
+    return restaurants.filter((restaurant: RestaurantProps) => {
       if (
         searchFilter &&
         !(
@@ -106,7 +107,7 @@ export const RestaurantList = () => {
       )}
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredRestaurants.map((restaurant, index) => (
+        {filteredRestaurants.map((restaurant: RestaurantProps, index: number) => (
           <Card
             key={restaurant.restaurantId ?? index}
             className="group cursor-pointer overflow-hidden bg-white transition-all duration-300 hover:shadow-xl"

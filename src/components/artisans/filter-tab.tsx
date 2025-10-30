@@ -16,6 +16,7 @@ import { Search } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { api } from "~/trpc/react";
+import type { CraftProps, SubCraftProps } from "~/types";
 
 // Define the filter form values type
 export type ArtisanFilterValues = {
@@ -164,7 +165,7 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
                         <SelectValue placeholder="-- Select Craft --" />
                       </SelectTrigger>
                       <SelectContent>
-                        {crafts.map((craft) => (
+                        {crafts.map((craft: CraftProps) => (
                           <SelectItem key={craft.craftId} value={craft.craftId}>
                             {craft.craftName}
                           </SelectItem>
@@ -186,7 +187,7 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
                         <SelectValue placeholder="-- Select Sub Craft --" />
                       </SelectTrigger>
                       <SelectContent>
-                        {subCrafts.data?.map((subCraft) => (
+                        {subCrafts.data?.map((subCraft: SubCraftProps) => (
                           <SelectItem key={subCraft.subCraftId} value={subCraft.subCraftId}>
                             {subCraft.subCraftName}
                           </SelectItem>

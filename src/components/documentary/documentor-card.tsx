@@ -1,6 +1,7 @@
 import { Calendar, CheckCircle2 } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import { DocumentorPackageBook } from "~/components/documentary/booking/booking-now";
+import type { DocumentorPackageProps } from "~/types";
 
 export const DocumentorPackageCard = ({ package: pkg }: { package: DocumentorPackageProps }) => {
   return (

@@ -7,6 +7,7 @@ import { Badge } from "~/components/ui/badge";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Card } from "~/components/ui/card";
 import { MapPin } from "lucide-react";
+import type { SafariProps, SafariTourProps } from "~/types";
 
 export const SafariList = () => {
   const router = useRouter();
@@ -32,23 +33,24 @@ export const SafariList = () => {
       return safaris;
     }
 
-    return safaris.filter((safari) => {
+    return safaris.filter((safari: SafariProps) => {
       // Check if safari has tours that match the filter criteria
-      if (!safari.SafariTour || safari.SafariTour.length === 0) {
+      const tours = (safari as unknown as { SafariTour?: SafariTourProps[] }).SafariTour;
+      if (!tours || tours.length === 0) {
         return false;
       }
 
       // Check craft villages filter
       if (craftVillagesFilter.length > 0) {
-        const hasMatchingVillage = safari.SafariTour.some(tour => {
-          return craftVillagesFilter.some(village => {
+        const hasMatchingVillage = tours.some((tour: SafariTourProps) => {
+          return craftVillagesFilter.some((village: string) => {
             // Handle combined village names like "Khanqah & Zadibal"
             if (village.includes('&')) {
-              const villageParts = village.split('&').map(part => part.trim().toLowerCase());
-              return villageParts.some(part => tour.title.toLowerCase().includes(part));
+              const villageParts = village.split('&').map((part: string) => part.trim().toLowerCase());
+              return villageParts.some((part: string) => tour.title.toLowerCase().includes(part));
             } else if (village.includes(',')) {
-              const villageParts = village.split(',').map(part => part.trim().toLowerCase());
-              return villageParts.some(part => tour.title.toLowerCase().includes(part));
+              const villageParts = village.split(',').map((part: string) => part.trim().toLowerCase());
+              return villageParts.some((part: string) => tour.title.toLowerCase().includes(part));
             } else {
               return tour.title.toLowerCase().includes(village.toLowerCase());
             }
@@ -59,10 +61,10 @@ export const SafariList = () => {
 
       // Check features filter (activity preferences)
       if (featuresFilter.length > 0) {
-        const hasMatchingFeature = safari.SafariTour.some(tour => {
-          return featuresFilter.some(feature => {
+        const hasMatchingFeature = tours.some((tour: SafariTourProps) => {
+          return featuresFilter.some((feature: string) => {
             // Check if any tour feature contains the selected activity preference
-            return tour.features.some(tourFeature => 
+            return tour.features.some((tourFeature: string) => 
               tourFeature.toLowerCase().includes(feature.toLowerCase())
             );
           });
@@ -78,7 +80,7 @@ export const SafariList = () => {
     <div className="px-4 py-8">
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {filteredSafaris.length > 0 ? (
-          filteredSafaris.map((safari, index) => (
+          filteredSafaris.map((safari: SafariProps, index: number) => (
             <Card
               key={safari.safariId ?? index}
               className="cursor-pointer overflow-hidden bg-white transition-shadow duration-300 hover:shadow-md"

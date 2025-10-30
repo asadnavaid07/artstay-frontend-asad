@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { EcoTransitOptionProps } from "~/types";
 
 type PackageStoreProps = {
   id: string;

@@ -7,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Card } from "~/components/ui/card";
 import { MapPin, Star } from "lucide-react";
 import { Button } from "~/components/ui/button";
+import type { LanguageServiceProps } from "~/types";
 
 export const LanguageList = () => {
   const router = useRouter();
@@ -28,7 +29,7 @@ export const LanguageList = () => {
 
   // Apply filters to services
   const filteredServices =
-    languageList.filter((service) => {
+    languageList.filter((service: LanguageServiceProps) => {
       // Apply search filter if specified
       if (
         searchFilter &&
@@ -125,7 +126,7 @@ export const LanguageList = () => {
 
       <div className="grid grid-cols-1 gap-8 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {filteredServices.length > 0 ? (
-          filteredServices.map((service, index) => (
+          filteredServices.map((service: LanguageServiceProps, index: number) => (
             <Card
               key={service.languageServiceId ?? index}
               className="cursor-pointer overflow-hidden bg-white transition-shadow duration-300 hover:shadow-md"

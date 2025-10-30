@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Badge } from "~/components/ui/badge";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
+import type { ArtisanDetailProps } from "~/types";
 
 export const ArtisanList = () => {
   const router = useRouter();
@@ -23,7 +24,7 @@ export const ArtisanList = () => {
   const [artisans] = api.artisan.getAllArtisans.useSuspenseQuery();
 
 const filteredArtisans = useMemo(() => {
-  return artisans.filter(artisan => {
+  return artisans.filter((artisan: ArtisanDetailProps) => {
     // Apply craft filter
     if (craftFilter && artisan.craft?.craftId?.toString() !== craftFilter) {
       return false;
@@ -78,7 +79,7 @@ const filteredArtisans = useMemo(() => {
   return (
     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4">
       {filteredArtisans.length > 0 ? (
-        filteredArtisans.map((artisan, index) => (
+        filteredArtisans.map((artisan: ArtisanDetailProps, index: number) => (
           <div
             key={artisan.artisanId ?? index}
             className="group relative overflow-hidden rounded-xl bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:cursor-pointer hover:shadow-xl"

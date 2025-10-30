@@ -2,6 +2,7 @@
 
 import { Button } from "~/components/ui/button";
 import { useDocumentorBooking } from "~/hooks/use-document";
+import type { DocumentorPackageProps } from "~/types";
 
 interface DocumentorPackageBookProps {
   package: DocumentorPackageProps;

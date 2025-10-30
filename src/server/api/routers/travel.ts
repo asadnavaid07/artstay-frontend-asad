@@ -4,6 +4,7 @@ import axios, { AxiosError } from "axios";
 import { env } from "process";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import type { ApiResponseProps, TravelPlanerProps, TravelPlanerDetailProps ,TravelPlannerFilterOptions} from "~/types"
 
 export const travelRouter = createTRPCRouter({
   getApplicationStatus: protectedProcedure.query(async ({ ctx }) => {

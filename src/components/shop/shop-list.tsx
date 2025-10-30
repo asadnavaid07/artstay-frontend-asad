@@ -15,6 +15,7 @@ import {
   Star,
 } from "lucide-react";
 import dayjs from "dayjs";
+import type { ShopProps } from "~/types";
 
 const PRODUCT_CATEGORIES = [
   { id: "pashmina", label: "Pashmina & Woolen Products" },
@@ -63,7 +64,7 @@ export const ShopList = () => {
       return shops;
     }
 
-    return shops.filter((shop) => {
+    return shops.filter((shop: ShopProps) => {
       // Search filter (search in shop name, description, business name)
       if (
         searchFilter &&
@@ -120,7 +121,7 @@ export const ShopList = () => {
 
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-2">
-      {filteredShops.map((shop, index) => (
+      {filteredShops.map((shop: ShopProps, index: number) => (
         <Card
           key={shop.shopId ?? index}
           className="group cursor-pointer overflow-hidden bg-white transition-all duration-300 hover:shadow-xl"
@@ -176,7 +177,7 @@ export const ShopList = () => {
 
             {/* Category tags */}
             <div className="mb-3 flex flex-wrap gap-1">
-              {shop.productCategories.slice(0, 3).map((category, i) => (
+              {shop.productCategories.slice(0, 3).map((category: string, i: number) => (
                 <Badge key={i} variant="secondary" className="text-xs">
                   <Tag className="mr-1 h-3 w-3" />
                   {getCategoryLabel(category)}

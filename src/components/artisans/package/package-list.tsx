@@ -3,6 +3,7 @@ import { Card, CardContent } from "~/components/ui/card";
 import { BookOpen, Calendar, Scroll, Clock, GraduationCap } from "lucide-react";
 import dayjs from "dayjs";
 import { SelectPackage } from "~/components/artisans/package/select-package";
+import type { ArtisanPackageProps } from "~/types";
 
 export const ArtisanPackage = ({
   packages,

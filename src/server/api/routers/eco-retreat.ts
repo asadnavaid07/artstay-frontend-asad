@@ -4,6 +4,7 @@ import { TRPCClientError } from "@trpc/client";
 import axios, { AxiosError } from "axios";
 import { env } from "~/env";
 import { z } from "zod";
+import type { ApiResponseProps, HotelProps, RoomProps, BlockDateProps, RatePlanDetailProps, FilteredPricesProps } from "~/types";
 
 export const ecoretreactRouter = createTRPCRouter({
   getAllHotels: publicProcedure.query(async () => {

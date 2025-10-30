@@ -13,6 +13,7 @@ import {
   Package,
   DollarSign,
 } from "lucide-react";
+import type { TravelPlanerProps } from "~/types";
 
 const getPriceRangeSymbol = (priceRange: string) => {
   switch (priceRange) {
@@ -52,7 +53,7 @@ export const TravelPlannerList = () => {
       return travelPlanners;
     }
 
-    return travelPlanners.filter((planner) => {
+    return travelPlanners.filter((planner: TravelPlanerProps) => {
       if (
         searchFilter &&
         !(
@@ -93,7 +94,7 @@ export const TravelPlannerList = () => {
   return (
     <div className="px-4 py-8">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredTravelPlanners.map((planner, index) => (
+        {filteredTravelPlanners.map((planner: TravelPlanerProps, index: number) => (
           <Card
             key={planner.travelPlanerId ?? index}
             className="group cursor-pointer overflow-hidden bg-white transition-all duration-300 hover:shadow-xl"

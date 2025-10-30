@@ -1,15 +1,15 @@
-type TraingEducationEnum = "FORMAL" | "NON_FORMAL";
-type CertificationEnum = "NONE" | "PROFESSIONAL" | "TRADE" | "WORKSHOP";
-type RecongnitionEnum = "STATE" | "NATIONAL" | "INTERNATIONAL";
-type ExperienceEnum = "APPRENTICE" | "CRAFTMAN" | "MASTER" | "GRANDMASTER";
-// API Response type for backend communication
-type ApiResponseProps<T> = {
+export export type TraingEducationEnum = "FORMAL" | "NON_FORMAL";
+export export type CertificationEnum = "NONE" | "PROFESSIONAL" | "TRADE" | "WORKSHOP";
+export export type RecongnitionEnum = "STATE" | "NATIONAL" | "INTERNATIONAL";
+export export type ExperienceEnum = "APPRENTICE" | "CRAFTMAN" | "MASTER" | "GRANDMASTER";
+// API Response export type for backend communication
+export export type ApiResponseProps<T> = {
   status: "success" | "error";
   message: string;
   data: T;
 };
 
-type LoginProps = {
+export export type LoginProps = {
   token: string;
   user: {
     id: string;
@@ -18,7 +18,7 @@ type LoginProps = {
   };
 };
 
-type CraftProps = {
+export export type CraftProps = {
   craftName: string;
   craftSlug: string;
   craftId: string;
@@ -26,7 +26,7 @@ type CraftProps = {
   updateAt: Date;
 };
 
-type SubCraftProps = {
+export export type SubCraftProps = {
   subCraftId: string;
   craftId: string;
   subCraftName: string;
@@ -35,7 +35,7 @@ type SubCraftProps = {
   updatedAt: Date;
 };
 
-type ArtisanDetailProps = {
+export export type ArtisanDetailProps = {
   artisanId: string;
   firstName: string;
   lastName: string;
@@ -54,7 +54,7 @@ type ArtisanDetailProps = {
   craft: CraftProps;
 };
 
-type ArtisanPaginationProps = {
+export export type ArtisanPaginationProps = {
   artisans: ArtisanDetailProps[];
   metadata: {
     cursor?: string;
@@ -65,12 +65,12 @@ type ArtisanPaginationProps = {
   };
 };
 
-type PortfolioProps = {
+export export type PortfolioProps = {
   portfolioId: string;
   images: string[];
 };
 
-type ArtisanPackageProps = {
+export export type ArtisanPackageProps = {
   packageId: string;
   duration: number;
   features: string[];
@@ -82,7 +82,7 @@ type ArtisanPackageProps = {
   updatedAt: Date;
 };
 
-type ArtisanPortolioProps = {
+export export type ArtisanPortolioProps = {
   artisanId: string;
   firstName: string;
   lastName: string;
@@ -103,7 +103,7 @@ type ArtisanPortolioProps = {
 };
 
 ///eco transit : fahad
-type EcoTransitProps = {
+export type EcoTransitProps = {
   transitId: string;
   name: string; // e.g., "Kashmir Valley Shuttle"
   dp: string; // Display picture URL
@@ -113,7 +113,7 @@ type EcoTransitProps = {
   accountId: string;
 };
 
-type EcoTransitOptionProps = {
+export type EcoTransitOptionProps = {
   optionId: string;
   title: string; // e.g., "Airport to City Center"
   operator: string; // e.g., "Valley Transports"
@@ -126,7 +126,7 @@ type EcoTransitOptionProps = {
   updatedAt: Date;
 };
 
-type EcoTransitDetailProps = {
+export type EcoTransitDetailProps = {
   transitId: string;
   name: string;
   dp: string;
@@ -136,7 +136,7 @@ type EcoTransitDetailProps = {
   EcoTransitOption: EcoTransitOptionProps[];
 };
 
-type EcoTransitBooking = {
+export type EcoTransitBooking = {
   transitBookingId: string;
   optionId: string;
   transitId: string;
@@ -152,7 +152,7 @@ type EcoTransitBooking = {
 
 /// fahad
 
-type SafariProps = {
+export type SafariProps = {
   safariId: string;
   firstName: string;
   lastName: string;
@@ -163,7 +163,7 @@ type SafariProps = {
   accountId: string;
 };
 
-type SafariPaginationProps = {
+export type SafariPaginationProps = {
   safaris: SafariProps[];
   metadata: {
     cursor?: string;
@@ -174,7 +174,7 @@ type SafariPaginationProps = {
   };
 };
 
-type SafariTourProps = {
+export type SafariTourProps = {
   tourId: string;
   title: string;
   operator: string;
@@ -187,7 +187,7 @@ type SafariTourProps = {
   updatedAt: Date;
 };
 
-type SafariDetailProps = {
+export type SafariDetailProps = {
   safariId: string;
   firstName: string;
   lastName: string;
@@ -198,7 +198,7 @@ type SafariDetailProps = {
   SafariTour: SafariTourProps[];
 };
 
-type FairProps = {
+export type FairProps = {
   fairId: string;
   firstName: string;
   lastName: string;
@@ -209,7 +209,7 @@ type FairProps = {
   accountId: string;
 };
 
-type FairPaginationProps = {
+export type FairPaginationProps = {
   fairs: FairProps[];
   metadata: {
     cursor?: string;
@@ -220,7 +220,7 @@ type FairPaginationProps = {
   };
 };
 
-type FairEventProps = {
+export type FairEventProps = {
   eventId: string;
   title: string;
   location: FairLocationEnum;
@@ -249,7 +249,7 @@ type FairEventProps = {
   };
 };
 
-type FairDetailProps = {
+export type FairDetailProps = {
   fairId: string;
   firstName: string;
   lastName: string;
@@ -260,7 +260,7 @@ type FairDetailProps = {
   FairEvent: FairEventProps[];
 };
 
-type ShopProps = {
+export type ShopProps = {
   shopId: string;
   accountId: string;
   businessName: string;
@@ -298,7 +298,7 @@ type ShopProps = {
   updatedAt: Date;
 };
 
-type ShopFilterOptionsProps = {
+export type ShopFilterOptionsProps = {
   productCategories: string[];
   locations: {
     cities: string[];
@@ -311,7 +311,7 @@ type ShopFilterOptionsProps = {
   certificationOptions: string[];
 };
 
-type ShopPaginationProps = {
+export type ShopPaginationProps = {
   shops: ShopProps[];
   metadata: {
     cursor?: string;
@@ -322,7 +322,7 @@ type ShopPaginationProps = {
   };
 };
 
-type ShopDetailProps = {
+export type ShopDetailProps = {
   shopId: string;
   accountId: string;
   businessName: string;
@@ -360,7 +360,7 @@ type ShopDetailProps = {
   products: ProductProps[];
 };
 
-type ProductProps = {
+export type ProductProps = {
   productId: string;
   name: string;
   description: string;
@@ -379,7 +379,7 @@ type ProductProps = {
   updatedAt: Date;
 };
 
-type RestaurantProps = {
+export type RestaurantProps = {
   restaurantId: string;
   accountId: string;
   name: string;
@@ -393,7 +393,7 @@ type RestaurantProps = {
   updatedAt: Date;
 };
 
-type RestaurantPaginationProps = {
+export type RestaurantPaginationProps = {
   dinings: RestaurantProps[];
   metadata: {
     cursor?: string;
@@ -404,13 +404,13 @@ type RestaurantPaginationProps = {
   };
 };
 
-type DiningFilterOptions = {
+export type DiningFilterOptions = {
   cuisines: string[];
   priceRanges: string[];
   locations: string[];
 };
 
-type DiningFilterValues = {
+export type DiningFilterValues = {
   search: string;
   cuisine: string;
   priceRange: string;
@@ -420,9 +420,9 @@ type DiningFilterValues = {
   isGlutenFree: boolean;
 };
 
-type MenuCategory = "STARTER" | "MAIN_COURSE" | "DESSERT" | "BEVERAGE";
+export type MenuCategory = "STARTER" | "MAIN_COURSE" | "DESSERT" | "BEVERAGE";
 
-type RestaurantMenuProps = {
+export type RestaurantMenuProps = {
   menuItemId: string;
   name: string;
   description: string;
@@ -438,7 +438,7 @@ type RestaurantMenuProps = {
   updatedAt: Date;
 };
 
-type RestaurantDetailProps = {
+export type RestaurantDetailProps = {
   restaurantId: string;
   name: string;
   description: string;
@@ -451,14 +451,14 @@ type RestaurantDetailProps = {
   menu: RestaurantMenuProps[];
 };
 
-type TravelPlannerFilterOptions = {
+export type TravelPlannerFilterOptions = {
   locations: string[];
   priceRanges: string[];
   languages: string[];
   specialities: string[];
 };
 
-type TravelPlannerFilterValues = {
+export type TravelPlannerFilterValues = {
   search: string;
   location: string;
   priceRange: string;
@@ -466,7 +466,7 @@ type TravelPlannerFilterValues = {
   speciality: string;
 };
 
-type TravelPlanerProps = {
+export type TravelPlanerProps = {
   travelPlanerId: string;
   name: string;
   description: string;
@@ -481,7 +481,7 @@ type TravelPlanerProps = {
   updatedAt: Date;
 };
 
-type TravelPlanerDetailProps = {
+export type TravelPlanerDetailProps = {
   travelPlanerId: string;
   name: string;
   dp: string;
@@ -497,7 +497,7 @@ type TravelPlanerDetailProps = {
   TravelTour: TravelTourProps[];
 };
 
-type TravelTourProps = {
+export type TravelTourProps = {
   tourId: string;
   title: string;
   description: string;
@@ -514,7 +514,7 @@ type TravelTourProps = {
   updatedAt: Date;
 };
 
-type LanguageServiceProps = {
+export type LanguageServiceProps = {
   languageServiceId: string;
   profileName: string;
   firstName: string;
@@ -542,7 +542,7 @@ type LanguageServiceProps = {
   updatedAt: Date;
 };
 
-type DocumentedCraftProps = {
+export type DocumentedCraftProps = {
   craftId: string;
   craftName: string;
   region: string;
@@ -551,7 +551,7 @@ type DocumentedCraftProps = {
   documentorId: string;
 };
 
-type CraftDocumentorProps = {
+export type CraftDocumentorProps = {
   documentorId: string;
   firstName: string;
   lastName: string;
@@ -568,7 +568,7 @@ type CraftDocumentorProps = {
   updatedAt: Date;
 };
 
-type DocumentorFilterOptions = {
+export type DocumentorFilterOptions = {
   specializations: string[];
   craftFocusAreas: string[];
   languages: string[];
@@ -576,7 +576,7 @@ type DocumentorFilterOptions = {
   priceRanges: string[];
 };
 
-type DocumentorDetailProps = {
+export type DocumentorDetailProps = {
   documentorId: string;
   firstName: string;
   lastName: string;
@@ -595,7 +595,7 @@ type DocumentorDetailProps = {
   DocumentorPortfolio?: DocumentorPortfolioProps;
 };
 
-type DocumentorPackageProps = {
+export type DocumentorPackageProps = {
   packageId: string;
   title: string;
   description: string;
@@ -608,7 +608,7 @@ type DocumentorPackageProps = {
   updatedAt: Date;
 };
 
-type DocumentorPortfolioProps = {
+export type DocumentorPortfolioProps = {
   portfolioId: string;
   images: string[];
   documentorId: string;
@@ -616,7 +616,7 @@ type DocumentorPortfolioProps = {
   updatedAt: Date;
 };
 
-type HotelProps = {
+export type HotelProps = {
   hotelId: string;
   code: string;
   name: string;
@@ -637,7 +637,7 @@ type HotelProps = {
   accountId: string;
 };
 
-type RoomProps = {
+export type RoomProps = {
   roomId: string;
   code: string;
   name: string;
@@ -655,12 +655,12 @@ type RoomProps = {
   hotelId: string;
 };
 
-type BlockDateProps = {
+export type BlockDateProps = {
   startDate: string;
   endDate: string;
 };
 
-type FilteredPricesProps = {
+export type FilteredPricesProps = {
   rrpId: string;
   rateId: string;
   roomId: string;
@@ -673,7 +673,7 @@ type FilteredPricesProps = {
   }[];
 };
 
-type RatePlanDetailProps = {
+export type RatePlanDetailProps = {
   code: string;
   description: string;
   hotelId: string;

@@ -2,6 +2,7 @@
 
 import { useFairEvent } from "~/hooks/use-fair";
 import { Button } from "~/components/ui/button";
+import type { FairEventProps } from "~/types";
 
 interface FairEventBookProps {
   event: FairEventProps;

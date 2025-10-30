@@ -63,7 +63,7 @@ export const ArtisanCalendar = () => {
 
   // Check if a date is booked
   const isDateBooked = (date: Dayjs): boolean => {
-    return bookedDates.some(booked => {
+    return bookedDates.some((booked: { startDate: string; endDate: string }) => {
       const startDate = dayjs(booked.startDate);
       const endDate = dayjs(booked.endDate);
       return date.isBetween(startDate, endDate, "day", "[]");
@@ -285,7 +285,7 @@ export const ArtisanCalendar = () => {
             Booked Periods ({bookedDates.length}):
           </p>
           <div className="mt-2 space-y-1">
-            {bookedDates.slice(0, 3).map((booking, index) => (
+            {bookedDates.slice(0, 3).map((booking: { startDate: string; endDate: string }, index: number) => (
               <div key={index} className="text-xs text-amber-700">
                 {dayjs(booking.startDate).format("MMM D")} - {dayjs(booking.endDate).format("MMM D, YYYY")}
               </div>

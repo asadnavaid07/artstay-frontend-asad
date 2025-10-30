@@ -12,6 +12,7 @@ import {
 import { HeadlingUnderline } from "~/components/common/heading-underline";
 import { SafariPackage } from "~/components/safari/package-list";
 import { SafariCalendar } from "~/components/safari/booking/safari-calendar";
+import type { SafariDetailProps } from "~/types";
 
 type PageProps = {
   searchParams: Promise<{ safariId: string }>;

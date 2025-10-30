@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { HeadlingUnderline } from "~/components/common/heading-underline";
 import { FairEvent } from "~/components/fair/fair-event";
+import type { FairDetailProps } from "~/types";
 
 
 type PageProps = {

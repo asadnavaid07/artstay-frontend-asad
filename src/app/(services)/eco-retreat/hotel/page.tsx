@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { HeadlingUnderline } from "~/components/common/heading-underline";
 import { RoomList } from "~/components/eco-retreat/room-list";
+import type { RoomProps } from "~/types";
 
 type PageProps = {
   searchParams: Promise<{ hotelId: string }>;

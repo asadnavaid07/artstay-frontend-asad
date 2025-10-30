@@ -10,6 +10,7 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { AddToCart } from "~/components/shop/add-cart";
+import type { ProductProps } from "~/types";
 
 
 

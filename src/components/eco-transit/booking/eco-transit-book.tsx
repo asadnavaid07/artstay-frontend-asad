@@ -2,6 +2,7 @@
 
 import { useEcoTransit } from "~/hooks/use-eco-transit";
 import { Button } from "~/components/ui/button";
+import type { EcoTransitOptionProps } from "~/types";
 
 interface BookNowButtonProps {
   option: EcoTransitOptionProps;

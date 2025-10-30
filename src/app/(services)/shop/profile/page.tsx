@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { HeadlingUnderline } from "~/components/common/heading-underline";
 import { Badge } from "~/components/ui/badge";
+import type { ShopDetailProps } from "~/types";
 import { Separator } from "~/components/ui/separator";
 import dayjs from "dayjs";
 import { ShopProducts } from "~/components/shop/shop-product";

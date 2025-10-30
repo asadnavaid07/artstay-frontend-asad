@@ -5,6 +5,7 @@ import { TRPCError } from "@trpc/server";
 import { env } from "~/env";
 import axios, { AxiosError } from "axios";
 import { z } from "zod";
+import type { ApiResponseProps, CraftDocumentorProps, DocumentorFilterOptions, DocumentorDetailProps } from "~/types";
 
 export const craftDocumentorRouter = createTRPCRouter({
   getApplicationStatus: protectedProcedure.query(async ({ ctx }) => {

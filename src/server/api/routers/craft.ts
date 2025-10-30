@@ -4,6 +4,7 @@ import { TRPCError } from "@trpc/server";
 import { env } from "~/env";
 import axios, { AxiosError } from "axios";
 import { z } from "zod";
+import type { ApiResponseProps, CraftProps, SubCraftProps } from "~/types";
 
 export const craftRouter = createTRPCRouter({
 

@@ -4,6 +4,7 @@ import { TRPCClientError } from "@trpc/client";
 import { TRPCError } from "@trpc/server";
 import { env } from "~/env";
 import { z } from "zod";
+import type { ApiResponseProps, RestaurantProps, RestaurantPaginationProps, RestaurantDetailProps, DiningFilterOptions } from "~/types";
 
 export const diningRouter = createTRPCRouter({
   getApplicationStatus: protectedProcedure.query(async ({ ctx }) => {

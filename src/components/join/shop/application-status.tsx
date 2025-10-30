@@ -390,7 +390,7 @@ export const ShopRegistrationStatus = () => {
                         Working Days
                       </p>
                       <div className="mt-1 flex flex-wrap gap-1">
-                        {shopData.workingDays?.map((day, index) => (
+                        {shopData.workingDays?.map((day: string, index: number) => (
                           <Badge
                             key={index}
                             variant="outline"
@@ -416,7 +416,7 @@ export const ShopRegistrationStatus = () => {
                       Product Categories
                     </p>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {shopData.productCategories?.map((category, index) => (
+                      {shopData.productCategories?.map((category: string, index: number) => (
                         <Badge key={index} variant="secondary">
                           {category}
                         </Badge>
@@ -456,7 +456,7 @@ export const ShopRegistrationStatus = () => {
                         Pickup Options
                       </p>
                       <div className="mt-1 flex flex-wrap gap-1">
-                        {shopData.pickupOptions?.map((option, index) => (
+                        {shopData.pickupOptions?.map((option: string, index: number) => (
                           <Badge
                             key={index}
                             variant="outline"
@@ -531,7 +531,7 @@ export const ShopRegistrationStatus = () => {
                         Payment Methods
                       </p>
                       <div className="mt-1 flex flex-wrap gap-1">
-                        {shopData.paymentMethods?.map((method, index) => (
+                        {shopData.paymentMethods?.map((method: string, index: number) => (
                           <Badge
                             key={index}
                             variant="outline"

@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Card } from "~/components/ui/card";
 import { MapPin } from "lucide-react";
 import { api } from "~/trpc/react";
-
+import type { EcoTransitProps } from "~/types";
 export const EcoTransitList = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -37,7 +37,7 @@ export const EcoTransitList = () => {
     if (!pickupLocation && !dropOffLocation && !travelDate && (vehicleType?.length ?? 0) === 0) {
       return ecoTransits;
     }
-    return ecoTransits.filter((_transit) => {
+    return ecoTransits.filter((_transit: EcoTransitProps) => {
       // Implement filtering logic (placeholder)
       return true; // Adjust based on actual filter logic
     });
@@ -61,7 +61,7 @@ export const EcoTransitList = () => {
     <div className="px-4 py-8">
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {(filteredTransits?.length ?? 0) > 0 ? (
-          filteredTransits?.map((transit) => (
+          filteredTransits?.map((transit: EcoTransitProps) => (
             <Card
               key={transit.transitId}
               className="cursor-pointer overflow-hidden bg-white transition-shadow duration-300 hover:shadow-md"

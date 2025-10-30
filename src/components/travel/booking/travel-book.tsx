@@ -3,6 +3,7 @@
 
 import { Button } from "~/components/ui/button";
 import { useTravel } from "~/hooks/use-travel";
+import type { TravelTourProps } from "~/types";
 
 interface BookNowButtonProps {
   tour: TravelTourProps;

@@ -2,6 +2,7 @@ import axios from "axios";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { env } from "~/env";
+import type { ApiResponseProps, LoginProps } from "~/types";
 
 
 

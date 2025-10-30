@@ -264,7 +264,7 @@ export const TravelPlannerRegistrationStatus = () => {
                 {travelPlannerData.language &&
                   travelPlannerData.language.length > 0 && (
                     <div className="mt-2 flex flex-wrap justify-center gap-2">
-                      {travelPlannerData.language.map((lang, index) => (
+                      {travelPlannerData.language.map((lang: string, index: number) => (
                         <Badge
                           key={index}
                           variant="secondary"
@@ -358,7 +358,7 @@ export const TravelPlannerRegistrationStatus = () => {
                       </h3>
                       <div className="mt-1 flex flex-wrap gap-2">
                         {travelPlannerData.speciality?.map(
-                          (specialty, index) => (
+                          (specialty: string, index: number) => (
                             <Badge
                               key={index}
                               variant="outline"

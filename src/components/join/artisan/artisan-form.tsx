@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 import { Separator } from "~/components/ui/separator";
 import { useState } from "react";
+import type { CraftProps, SubCraftProps } from "~/types";
 
 const artisanFormSchema = z
   .object({
@@ -392,7 +393,7 @@ export const ArtisanJoinForm = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {crafts.map((craft) => (
+                      {crafts.map((craft: CraftProps) => (
                         <SelectItem key={craft.craftId} value={craft.craftId}>
                           {craft.craftName}
                         </SelectItem>
@@ -425,7 +426,7 @@ export const ArtisanJoinForm = () => {
                           <SelectItem value="loading">Loading...</SelectItem>
                         )
                       }
-                      {subcrafts.data?.map((subcraft) => (
+                      {subcrafts.data?.map((subcraft: SubCraftProps) => (
                         <SelectItem
                           key={subcraft.subCraftId}
                           value={subcraft.subCraftId}

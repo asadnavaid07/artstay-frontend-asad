@@ -14,6 +14,7 @@ import {
 } from "~/components/ui/carousel";
 import { Button } from "~/components/ui/button";
 import Link from "next/link";
+import type { HotelProps } from "~/types";
 
 export const HotelList = () => {
   const [hotels] = api.ecoretreact.getAllHotels.useSuspenseQuery();
@@ -22,7 +23,7 @@ export const HotelList = () => {
     <div className="mx-auto max-w-7xl px-2 py-6">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {hotels.length > 0 ? (
-          hotels.map((hotel) => (
+          hotels.map((hotel: HotelProps) => (
             <Card
               key={hotel.hotelId}
               className="group cursor-pointer overflow-hidden border border-border/50 bg-card transition-all duration-300 hover:border-primary/20"

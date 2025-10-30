@@ -9,6 +9,8 @@ import { useCallback, useEffect } from "react";
 import { Button } from "~/components/ui/button";
 import { useRoom } from "~/hooks/use-room";
 import { api } from "~/trpc/react";
+import type { RoomProps } from "~/types";
+import type { RatePlanDetailProps } from "~/types";
 
 type ComponentProps = {
   room: RoomProps;
@@ -35,8 +37,8 @@ export const RoomInput = ({ room }: ComponentProps) => {
         ratePlanName: string;
       }> = [];
 
-      ratePlans.forEach(ratePlan => {
-        ratePlan.roomrateplans?.forEach(rrp => {
+      ratePlans.forEach((ratePlan: RatePlanDetailProps) => {
+        ratePlan.roomrateplans?.forEach((rrp: RatePlanDetailProps["roomrateplans"][number]) => {
           occupancyOptions.push({
             occupancy: rrp.occupancy,
             rrpId: rrp.rrpId,

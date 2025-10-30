@@ -168,7 +168,7 @@ export const ShopFilter = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="value" disabled>All Categories</SelectItem>
-                      {filterOptions.productCategories.map((category) => (
+                      {filterOptions.productCategories.map((category: string) => (
                         <SelectItem key={category} value={category}>
                           {category}
                         </SelectItem>
@@ -198,7 +198,7 @@ export const ShopFilter = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="value" disabled>All Products</SelectItem>
-                        {filterOptions.handmadeOptions.map((option) => (
+                        {filterOptions.handmadeOptions.map((option: string) => (
                           <SelectItem key={option} value={option}>
                             {option === "Yes" ? "Handmade Only" : option}
                           </SelectItem>

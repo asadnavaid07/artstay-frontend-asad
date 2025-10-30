@@ -16,6 +16,7 @@ import {
 } from "~/components/ui/select";
 import { Checkbox } from "~/components/ui/checkbox";
 import { api } from "~/trpc/react";
+import type { DiningFilterValues } from "~/types";
 
 const PRICE_RANGE_LABELS = {
   "$": "$ (Budget)",
@@ -155,7 +156,7 @@ export const DiningFilter = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="vaue" disabled>All Locations</SelectItem>
-                        {filterOptions.locations.map((location) => (
+                        {filterOptions.locations.map((location: string) => (
                           <SelectItem key={location} value={location}>
                             {location}
                           </SelectItem>
@@ -187,7 +188,7 @@ export const DiningFilter = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="vaue" disabled>All Cuisines</SelectItem>
-                        {filterOptions.cuisines.map((cuisine) => (
+                        {filterOptions.cuisines.map((cuisine: string) => (
                           <SelectItem key={cuisine} value={cuisine}>
                             {cuisine}
                           </SelectItem>
@@ -213,7 +214,7 @@ export const DiningFilter = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="vaue" disabled>All Price Ranges</SelectItem>
-                        {filterOptions.priceRanges.map((range) => (
+                        {filterOptions.priceRanges.map((range: string) => (
                           <SelectItem key={range} value={range}>
                             {PRICE_RANGE_LABELS[range as keyof typeof PRICE_RANGE_LABELS] || range}
                           </SelectItem>

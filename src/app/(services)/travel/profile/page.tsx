@@ -12,6 +12,7 @@ import {
 import { HeadlingUnderline } from "~/components/common/heading-underline";
 import { TravelPackage } from "~/components/travel/booking/travel-package";
 import { TravelCalendar } from "~/components/travel/booking/travle-calendar";
+import type { TravelTourProps } from "~/types";
 
 
 type PageProps = {
@@ -145,7 +146,7 @@ export default async function TravelPlannerPage({ searchParams }: PageProps) {
 
         <TabsContent value="packages" className="grid gap-6">
           <HeadlingUnderline title="Available Travel Tours" />
-          {travelPlanner.TravelTour.map((tour) => (
+          {travelPlanner.TravelTour.map((tour: TravelTourProps) => (
             <TravelPackage tour={tour} key={tour.tourId} />
           ))}
         </TabsContent>

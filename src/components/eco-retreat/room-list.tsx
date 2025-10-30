@@ -36,6 +36,7 @@ import {
 } from "~/components/ui/carousel";
 import Image from "next/image";
 import Link from "next/link";
+import type { RoomProps } from "~/types";
 
 type ComponentProps = {
   rooms: RoomProps[];

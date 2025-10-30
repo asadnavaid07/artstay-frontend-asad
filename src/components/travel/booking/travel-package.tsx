@@ -1,6 +1,7 @@
 import { Calendar, CheckCircle2, Clock, Users } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import { TravelBook } from "~/components/travel/booking/travel-book";
+import type { TravelTourProps } from "~/types";
 
 export const TravelPackage = ({ tour }: { tour: TravelTourProps }) => {
   return (

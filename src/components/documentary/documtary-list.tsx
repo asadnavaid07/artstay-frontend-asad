@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent } from "~/components/ui/card";
 import { Badge } from "~/components/ui/badge";
+import type { CraftDocumentorProps } from "~/types";
 import {
   MapPin,
   FileText,
@@ -45,7 +46,7 @@ export const DocumentorList = () => {
       return documentors;
     }
 
-    return documentors.filter((documentor) => {
+    return documentors.filter((documentor: CraftDocumentorProps) => {
       // Search filter
       if (
         searchFilter &&
@@ -111,7 +112,7 @@ export const DocumentorList = () => {
 
       {/* Documentor Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredDocumentors.map((documentor, index) => (
+        {filteredDocumentors.map((documentor: CraftDocumentorProps, index: number) => (
           <Card
             key={documentor.documentorId ?? index}
             className="group cursor-pointer overflow-hidden bg-white transition-all duration-300 hover:shadow-xl"
@@ -159,7 +160,7 @@ export const DocumentorList = () => {
               
               {/* Specializations */}
               <div className="mb-3 flex flex-wrap gap-1">
-                {documentor.specialization?.slice(0, 2).map((spec, i) => (
+                {documentor.specialization?.slice(0, 2).map((spec: string, i: number) => (
                   <Badge key={i} variant="secondary" className="text-xs">
                     <FileText className="mr-1 h-3 w-3" />
                     {spec}
@@ -174,7 +175,7 @@ export const DocumentorList = () => {
 
               {/* Craft Focus Areas */}
               <div className="mb-3 flex flex-wrap gap-1">
-                {documentor.craftFocusAreas?.slice(0, 2).map((area, i) => (
+                {documentor.craftFocusAreas?.slice(0, 2).map((area: string, i: number) => (
                   <Badge key={i} variant="outline" className="text-xs">
                     <Star className="mr-1 h-3 w-3" />
                     {area}
@@ -189,7 +190,7 @@ export const DocumentorList = () => {
 
               {/* Languages */}
               <div className="mb-3 flex flex-wrap gap-1">
-                {documentor.languages?.slice(0, 3).map((lang, i) => (
+                {documentor.languages?.slice(0, 3).map((lang: string, i: number) => (
                   <Badge key={i} className="bg-blue-100 text-blue-800 text-xs">
                     <Users className="mr-1 h-3 w-3" />
                     {lang}

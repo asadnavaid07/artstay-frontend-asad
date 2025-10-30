@@ -15,6 +15,7 @@ import {
   SelectValue 
 } from "~/components/ui/select";
 import { api } from "~/trpc/react";
+import type { TravelPlannerFilterValues } from "~/types";
 
 const PRICE_RANGE_LABELS = {
   "$": "$ (Budget)",
@@ -139,7 +140,7 @@ export const TravelPlannerFilter = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="value" disabled>All Locations</SelectItem>
-                        {filterOptions.locations.map((location) => (
+                        {filterOptions.locations.map((location: string) => (
                           <SelectItem key={location} value={location}>
                             {location}
                           </SelectItem>
@@ -171,7 +172,7 @@ export const TravelPlannerFilter = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="value" disabled>All Specialities</SelectItem>
-                        {filterOptions.specialities.map((speciality) => (
+                        {filterOptions.specialities.map((speciality: string) => (
                           <SelectItem key={speciality} value={speciality}>
                             {speciality}
                           </SelectItem>
@@ -199,7 +200,7 @@ export const TravelPlannerFilter = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="value" disabled>All Languages</SelectItem>
-                        {filterOptions.languages.map((language) => (
+                        {filterOptions.languages.map((language: string) => (
                           <SelectItem key={language} value={language}>
                             {language}
                           </SelectItem>
@@ -229,7 +230,7 @@ export const TravelPlannerFilter = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="value" disabled>All Price Ranges</SelectItem>
-                        {filterOptions.priceRanges.map((range) => (
+                        {filterOptions.priceRanges.map((range: string) => (
                           <SelectItem key={range} value={range}>
                             {PRICE_RANGE_LABELS[range as keyof typeof PRICE_RANGE_LABELS] || range}
                           </SelectItem>

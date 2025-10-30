@@ -3,6 +3,7 @@ import { ShoppingBag } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import { ProductItem } from "~/components/shop/product-item";
 import { CartSidebar } from "~/components/shop/shop-sidebar";
+import type { ProductProps } from "~/types";
 
 
 // Category labels
