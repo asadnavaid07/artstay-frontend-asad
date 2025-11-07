@@ -69,7 +69,7 @@ export const BusinessForm = () => {
   };
 
   return (
-    <div className="z-[100] -mt-16 mx-auto w-full max-w-xl rounded-lg bg-white shadow-lg">
+    <div className="z-[100] mx-auto w-full max-w-xl rounded-lg bg-white shadow-lg">
       <div className="rounded-t-lg bg-primary p-4 text-white border-2 border-white">
         <h2 className="text-center text-xl font-bold">
           Find Nearby ArtStay Affiliated Craft Store  <br />

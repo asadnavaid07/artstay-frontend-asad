@@ -447,21 +447,32 @@ export const registerRouter = createTRPCRouter({
   createEcoTransit: publicProcedure
     .input(
       z.object({
-        name: z.string(),
-        address: z.string(),
-        description: z.string(),
-        dp: z.string(),
-        email: z.string(),
-        password: z.string(),
+        name: z.string().min(1, "Name is required"),
+        address: z.string().min(1, "Address is required"),
+        description: z.string().min(1, "Description is required"),
+        dp: z.string().min(1, "Display picture is required"),
+        email: z.string().email("Invalid email address"),
+        password: z.string().min(8, "Password must be at least 8 characters"),
       }),
     )
     .mutation(async ({ input }) => {
       try {
-        await axios.post<ApiResponseProps<null>>(
+        const response = await axios.post<ApiResponseProps<null>>(
           `${env.API_URL}/register/eco-transit`,
           input,
         );
+        
+        // Check if the response indicates an error
+        if (response.data.status === "error") {
+          throw new TRPCError({
+            message: response.data.message || "Failed to create eco transit",
+            code: "BAD_REQUEST",
+          });
+        }
       } catch (error) {
+        if (error instanceof TRPCError) {
+          throw error;
+        }
         if (error instanceof TRPCClientError) {
           console.error(error.message);
           throw new TRPCError({
@@ -469,6 +480,17 @@ export const registerRouter = createTRPCRouter({
             code: "NOT_FOUND",
           });
         } else if (error instanceof AxiosError) {
+          const responseData = error.response?.data as ApiResponseProps<null> | { errors: string[] };
+          
+          // Check if it's the expected error format from our backend
+          if (responseData && "status" in responseData && responseData.status === "error") {
+            throw new TRPCError({
+              message: responseData.message || "Failed to create eco transit",
+              code: "BAD_REQUEST",
+            });
+          }
+          
+          // Handle other error formats
           const axiosError = error as AxiosError<{ errors: string[] }>;
           console.error(axiosError.response?.data.errors);
           throw new TRPCError({

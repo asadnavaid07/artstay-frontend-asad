@@ -33,6 +33,7 @@ import { TravelerForm } from "~/components/join/travel/traveler-form";
 
 export const TravelPlannerRegistrationStatus = () => {
   const session = useSession();
+  // session.status = "authenticated";
   const { setIsLogin } = useLogin();
   const [showForm, setShowForm] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -78,7 +79,13 @@ export const TravelPlannerRegistrationStatus = () => {
 
   // User is logged in and has an application
   if (session.status === "authenticated" && travelPlannerData) {
-    const isApproved = travelPlannerData.isActice === true;
+    // Handle both string "true" and boolean true (note: type has typo isActice)
+    // Also check for isActive in case the typo is fixed in the future
+    const isApproved = 
+      travelPlannerData.isActice === true || 
+      (travelPlannerData.isActice as unknown as string) === "true" ||
+      ((travelPlannerData as { isActive?: boolean | string }).isActive === true) ||
+      ((travelPlannerData as { isActive?: boolean | string }).isActive === "true");
 
     return (
       <Card className="overflow-hidden border-gray-200 shadow-sm">
@@ -408,7 +415,12 @@ export const TravelPlannerRegistrationStatus = () => {
   }
 
   // User is not logged in or doesn't have an application
-  if (session.status === "unauthenticated" && !showForm) {
+  // Show options screen if: unauthenticated OR authenticated but no data and showForm is false
+  if (
+    (session.status === "unauthenticated" || 
+     (session.status === "authenticated" && !travelPlannerData)) && 
+    !showForm
+  ) {
     return (
       <Card className="border-gray-200 shadow-sm">
         <CardHeader className="space-y-1 text-center">
@@ -433,10 +445,21 @@ export const TravelPlannerRegistrationStatus = () => {
                 log in to check its status
               </p>
               <Button
-                onClick={() => setIsLogin(true)}
+                onClick={async () => {
+                  if (session.status === "authenticated") {
+                    // If already logged in, refetch the application status
+                    setIsLoading(true);
+                    await refetch();
+                    setIsLoading(false);
+                  } else {
+                    // If not logged in, show login modal
+                    setIsLogin(true);
+                  }
+                }}
                 className="mt-auto w-full"
+                disabled={isLoadingApplication}
               >
-                Login to Check Status
+                {isLoadingApplication ? "Checking..." : "Check Application Status"}
               </Button>
             </div>
 

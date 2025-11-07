@@ -140,7 +140,7 @@ export const Banner = ({ banner }: ComponentProps) => {
   };
 
   return (
-    <section className="relative h-[calc(80dvh)] overflow-hidden bg-primary ">
+    <section className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[calc(80dvh)] overflow-hidden bg-primary">
       {/* Background image with overlay */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -152,7 +152,7 @@ export const Banner = ({ banner }: ComponentProps) => {
         />
         {/* Blue overlay with blend mode */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 z-0"
           style={{
             background: '#0085CC',
             mixBlendMode: 'multiply',
@@ -160,7 +160,7 @@ export const Banner = ({ banner }: ComponentProps) => {
           }}
         />
       </div>
-      <Container className="h-full relative z-10">
+      <Container className="h-full relative z-[1]">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex}
@@ -168,37 +168,37 @@ export const Banner = ({ banner }: ComponentProps) => {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="absolute inset-0 flex items-center"
+            className="absolute inset-0 flex items-center px-3 sm:px-4 md:px-6 lg:px-8 w-full min-w-0 z-[1]"
           >
             <motion.div
               variants={containerVariants}
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="mx-6 grid gap-2 lg:container"
+              className="w-full max-w-7xl mx-auto grid gap-2 sm:gap-3 md:gap-4 min-w-0 px-2"
             >
-              {/* CHANGED: Reduced line spacing by adjusting leading classes */}
+              {/* Responsive title with better mobile handling */}
               <motion.p
                 variants={titleVariants}
-                className="whitespace-normal font-heading text-[2rem] font-extrabold leading-[3rem] md:leading-[4.5rem] lg:leading-[5.5rem] lg:text-[3rem] xl:text-[5rem] 2xl:text-[6rem] text-white"
+                className="whitespace-normal font-heading text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-extrabold leading-tight sm:leading-snug md:leading-normal lg:leading-[4.5rem] xl:leading-[5.5rem] 2xl:leading-[6rem] text-white"
               >
                 {firstLine} <span className="block">{secondLine}</span>
               </motion.p>
               <motion.p
                 variants={subtitleVariants}
-                className="mt-2 font-text text-base md:text-lg lg:text-2xl text-white"
+                className="mt-2 sm:mt-3 md:mt-4 font-text text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-white max-w-3xl"
               >
                 {banner[activeIndex]?.subtitle}
               </motion.p>
               <motion.div 
                 variants={buttonVariants} 
-                className="mt-6"
+                className="mt-4 sm:mt-5 md:mt-6"
               >
                 <Button 
                   type="button"
                   variant="secondary"
                   size="lg" 
-                  className="w-fit text-xl"
+                  className="w-full sm:w-fit text-sm sm:text-base md:text-lg lg:text-xl px-4 sm:px-6 md:px-8 py-2 sm:py-3"
                 >
                   {banner[activeIndex]?.buttonText}
                 </Button>
@@ -208,14 +208,14 @@ export const Banner = ({ banner }: ComponentProps) => {
         </AnimatePresence>
       </Container>
       
-      {/* Slider dots/indicators */}
-      <div className="absolute bottom-4 left-0 right-0 z-20 flex justify-center gap-2">
+      {/* Slider dots/indicators - Responsive positioning */}
+      <div className="absolute bottom-2 sm:bottom-4 md:bottom-6 left-0 right-0 z-[2] flex justify-center gap-1.5 sm:gap-2 px-4">
         {banner.map((_, index) => (
           <button
             key={index}
-            className={`h-2 w-2 rounded-full transition-all duration-300 ${
+            className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full transition-all duration-300 ${
               index === activeIndex
-                ? "bg-white w-6"
+                ? "bg-white w-4 sm:w-6"
                 : "bg-white/50 hover:bg-white/75"
             }`}
             onClick={() => setActiveIndex(index)}

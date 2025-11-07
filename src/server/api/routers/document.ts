@@ -75,8 +75,20 @@ export const craftDocumentorRouter = createTRPCRouter({
         const response = await axios.post<
           ApiResponseProps<{ documentorId: string }>
         >(`${env.API_URL}/documentor/create-profile`, input);
+        
+        // Check if the response indicates an error
+        if (response.data.status === "error") {
+          throw new TRPCError({
+            message: response.data.message || "Failed to create documentor profile",
+            code: "BAD_REQUEST",
+          });
+        }
+        
         return response.data.data;
       } catch (error) {
+        if (error instanceof TRPCError) {
+          throw error;
+        }
         if (error instanceof TRPCClientError) {
           console.error(error.message);
           throw new TRPCError({
@@ -84,6 +96,17 @@ export const craftDocumentorRouter = createTRPCRouter({
             code: "NOT_FOUND",
           });
         } else if (error instanceof AxiosError) {
+          const responseData = error.response?.data as ApiResponseProps<null> | { errors: string[] };
+          
+          // Check if it's the expected error format from our backend
+          if (responseData && "status" in responseData && responseData.status === "error") {
+            throw new TRPCError({
+              message: responseData.message || "Failed to create documentor profile",
+              code: "BAD_REQUEST",
+            });
+          }
+          
+          // Handle other error formats
           const axiosError = error as AxiosError<{ errors: string[] }>;
           console.error(axiosError.response?.data.errors);
           throw new TRPCError({

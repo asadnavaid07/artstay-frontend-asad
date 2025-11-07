@@ -121,7 +121,7 @@ const getFeatureIcon = (feature: string) => {
 
 export const RoomList = ({ rooms }: ComponentProps) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {rooms.length > 0 ? (
         rooms.map((room) => (
           <Card
@@ -130,17 +130,17 @@ export const RoomList = ({ rooms }: ComponentProps) => {
           >
             <div className="flex flex-col lg:flex-row">
               {/* Room Images */}
-              <div className="lg:w-1/3">
+              <div className="w-full lg:w-1/3">
                 {room.images && room.images.length > 0 ? (
-                  <div className="relative h-64 w-full lg:h-80">
-                    <Carousel className="h-64 w-full lg:h-80">
-                      <CarouselContent className="ml-0 h-64 lg:h-80">
+                  <div className="relative h-48 sm:h-56 md:h-64 w-full lg:h-80">
+                    <Carousel className="h-48 sm:h-56 md:h-64 w-full lg:h-80">
+                      <CarouselContent className="ml-0 h-48 sm:h-56 md:h-64 lg:h-80">
                         {room.images.map((image, index) => (
                           <CarouselItem
                             key={index}
-                            className="h-64 pl-0 lg:h-80"
+                            className="h-48 sm:h-56 md:h-64 pl-0 lg:h-80"
                           >
-                            <div className="relative h-64 w-full lg:h-80">
+                            <div className="relative h-48 sm:h-56 md:h-64 w-full lg:h-80">
                               <Image
                                 src={image || "/placeholder.png"}
                                 alt={`${room.name} - Image ${index + 1}`}
@@ -154,89 +154,89 @@ export const RoomList = ({ rooms }: ComponentProps) => {
                       </CarouselContent>
                       {room.images.length > 1 && (
                         <>
-                          <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2" />
-                          <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2" />
+                          <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 sm:h-10 sm:w-10" />
+                          <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 sm:h-10 sm:w-10" />
                         </>
                       )}
                     </Carousel>
                   </div>
                 ) : (
-                  <div className="flex h-64 items-center justify-center bg-gray-100 lg:h-80">
-                    <Bed className="h-12 w-12 text-gray-400" />
+                  <div className="flex h-48 sm:h-56 md:h-64 items-center justify-center bg-gray-100 lg:h-80">
+                    <Bed className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400" />
                   </div>
                 )}
               </div>
 
               {/* Room Details */}
-              <div className="flex-1 p-6 lg:p-8">
-                <div className="mb-4 flex items-start justify-between">
-                  <div>
-                    <h3 className="mb-2 font-heading text-2xl font-bold text-primary">
+              <div className="flex-1 p-4 sm:p-6 lg:p-8">
+                <div className="mb-3 sm:mb-4 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+                  <div className="flex-1">
+                    <h3 className="mb-2 font-heading text-xl sm:text-2xl font-bold text-primary">
                       {room.name}
                     </h3>
-                    <div className="mb-3 flex items-center gap-4">
-                      <Badge className="bg-primary/10 font-text text-primary hover:bg-primary/20">
+                    <div className="mb-3 flex flex-wrap items-center gap-2 sm:gap-4">
+                      <Badge className="bg-primary/10 font-text text-xs sm:text-sm text-primary hover:bg-primary/20">
                         {room.code}
                       </Badge>
                       <Badge
-                        className={`font-text ${room.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+                        className={`font-text text-xs sm:text-sm ${room.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
                       >
                         {room.isActive ? "Available" : "Unavailable"}
                       </Badge>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="font-heading text-3xl font-bold text-primary">
+                  <div className="text-left sm:text-right">
+                    <div className="font-heading text-2xl sm:text-3xl font-bold text-primary">
                       ${room.price}
                     </div>
-                    <span className="font-text text-sm text-gray-600">
+                    <span className="font-text text-xs sm:text-sm text-gray-600">
                       per night
                     </span>
                   </div>
                 </div>
 
                 {/* Room Stats */}
-                <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
-                  <div className="flex items-center gap-2 rounded-lg bg-gray-50 p-3">
-                    <Users className="h-5 w-5 text-primary" />
-                    <div>
-                      <div className="font-text text-sm text-gray-600">
+                <div className="mb-4 sm:mb-6 grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-4">
+                  <div className="flex items-center gap-1.5 sm:gap-2 rounded-lg bg-gray-50 p-2 sm:p-3">
+                    <Users className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+                    <div className="min-w-0">
+                      <div className="font-text text-xs sm:text-sm text-gray-600">
                         Capacity
                       </div>
-                      <div className="font-text font-semibold text-gray-900">
+                      <div className="font-text text-xs sm:text-sm font-semibold text-gray-900">
                         {room.capacity} Guests
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 rounded-lg bg-gray-50 p-3">
-                    <Bed className="h-5 w-5 text-primary" />
-                    <div>
-                      <div className="font-text text-sm text-gray-600">
+                  <div className="flex items-center gap-1.5 sm:gap-2 rounded-lg bg-gray-50 p-2 sm:p-3">
+                    <Bed className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+                    <div className="min-w-0">
+                      <div className="font-text text-xs sm:text-sm text-gray-600">
                         Beds
                       </div>
-                      <div className="font-text font-semibold text-gray-900">
+                      <div className="font-text text-xs sm:text-sm font-semibold text-gray-900">
                         {room.beds} Beds
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 rounded-lg bg-gray-50 p-3">
-                    <Maximize className="h-5 w-5 text-primary" />
-                    <div>
-                      <div className="font-text text-sm text-gray-600">
+                  <div className="flex items-center gap-1.5 sm:gap-2 rounded-lg bg-gray-50 p-2 sm:p-3">
+                    <Maximize className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+                    <div className="min-w-0">
+                      <div className="font-text text-xs sm:text-sm text-gray-600">
                         Area
                       </div>
-                      <div className="font-text font-semibold text-gray-900">
+                      <div className="font-text text-xs sm:text-sm font-semibold text-gray-900">
                         {room.area} sq ft
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 rounded-lg bg-gray-50 p-3">
-                    <Calendar className="h-5 w-5 text-primary" />
-                    <div>
-                      <div className="font-text text-sm text-gray-600">
+                  <div className="flex items-center gap-1.5 sm:gap-2 rounded-lg bg-gray-50 p-2 sm:p-3">
+                    <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+                    <div className="min-w-0">
+                      <div className="font-text text-xs sm:text-sm text-gray-600">
                         Min Stay
                       </div>
-                      <div className="font-text font-semibold text-gray-900">
+                      <div className="font-text text-xs sm:text-sm font-semibold text-gray-900">
                         {room.minimumstay} Nights
                       </div>
                     </div>
@@ -244,23 +244,23 @@ export const RoomList = ({ rooms }: ComponentProps) => {
                 </div>
 
                 {/* Description */}
-                <p className="mb-6 font-text leading-relaxed text-gray-600">
+                <p className="mb-4 sm:mb-6 font-text text-sm sm:text-base leading-relaxed text-gray-600">
                   {room.description}
                 </p>
 
                 {/* Features */}
-                <div className="mb-6">
-                  <h4 className="mb-3 font-heading font-semibold text-gray-900">
+                <div className="mb-4 sm:mb-6">
+                  <h4 className="mb-2 sm:mb-3 font-heading text-sm sm:text-base font-semibold text-gray-900">
                     Room Features
                   </h4>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {room.features.map((feature, index) => (
                       <div
                         key={index}
-                        className="flex items-center gap-2 rounded-full bg-primary/10 px-3 py-2 text-primary"
+                        className="flex items-center gap-1.5 sm:gap-2 rounded-full bg-primary/10 px-2 sm:px-3 py-1.5 sm:py-2 text-primary"
                       >
-                        {getFeatureIcon(feature)}
-                        <span className="font-text text-sm font-medium">
+                        <span className="h-3 w-3 sm:h-4 sm:w-4">{getFeatureIcon(feature)}</span>
+                        <span className="font-text text-xs sm:text-sm font-medium">
                           {feature}
                         </span>
                       </div>
@@ -269,7 +269,7 @@ export const RoomList = ({ rooms }: ComponentProps) => {
                 </div>
 
                 {/* Actions */}
-                <Button asChild>
+                <Button className="w-full sm:w-auto text-sm sm:text-base" asChild>
                   <Link href={`/eco-retreat/room?roomId=${room.roomId}`}>
                     Book Now
                   </Link>
@@ -279,12 +279,12 @@ export const RoomList = ({ rooms }: ComponentProps) => {
           </Card>
         ))
       ) : (
-        <Card className="p-12 text-center">
-          <Bed className="mx-auto mb-4 h-16 w-16 text-gray-400" />
-          <h3 className="mb-2 font-heading text-xl font-semibold text-gray-900">
+        <Card className="p-8 sm:p-12 text-center">
+          <Bed className="mx-auto mb-3 sm:mb-4 h-12 w-12 sm:h-16 sm:w-16 text-gray-400" />
+          <h3 className="mb-2 font-heading text-lg sm:text-xl font-semibold text-gray-900">
             No Rooms Available
           </h3>
-          <p className="font-text text-gray-600">
+          <p className="font-text text-sm sm:text-base text-gray-600">
             This hotel currently has no rooms listed. Please check back later.
           </p>
         </Card>

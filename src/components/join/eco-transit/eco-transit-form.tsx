@@ -108,13 +108,16 @@ export const EcoTransitForm = () => {
   });
 
   const onSubmit = async (data: EcoTransitInputProps) => {
+    // Ensure all fields are non-empty strings as required by backend schema
+    const dpValue = data.dp && data.dp.trim() !== '' ? data.dp : '/placeholder.png';
+    
     createEcoTransit.mutate({
-      name: `${data.firstName} ${data.lastName}`,
-      address: data.address,
-      description: data.description,
-      email: data.email,
+      name: `${data.firstName.trim()} ${data.lastName.trim()}`.trim(),
+      address: data.address.trim(),
+      description: data.description.trim(),
+      email: data.email.trim(),
       password: data.password,
-      dp: data.dp ?? '/placeholder.png',
+      dp: dpValue,
     });
   };
 
@@ -310,9 +313,14 @@ export const EcoTransitForm = () => {
           />
         </FormSection>
         <Separator className="my-6" />
-        <Button type="submit" disabled={false}>
+        <Button type="submit" disabled={createEcoTransit.isPending}>
           <div className="flex items-center justify-center gap-2">
-            <span>Complete Registration</span>
+            {createEcoTransit.isPending && (
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+            )}
+            <span>
+              {createEcoTransit.isPending ? "Submitting..." : "Complete Registration"}
+            </span>
           </div>
         </Button>
       </form>

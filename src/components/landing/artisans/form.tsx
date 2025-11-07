@@ -313,17 +313,17 @@ export const ArtisanForm = () => {
   };
 
   return (
-    <div className="z-[100] -mt-16 col-span-2 lg:col-span-1 flex max-w-lg flex-col gap-3 rounded-lg bg-white shadow-xl">
-      <div className="rounded-t-lg bg-primary p-3 border-white border-2">
-        <h2 className="text-center font-heading text-xl font-bold text-white">
+    <div className="z-[100] mx-auto w-full max-w-xl rounded-lg bg-white shadow-lg">
+      <div className="rounded-t-lg bg-primary p-4 text-white border-2 border-white">
+        <h2 className="text-center text-xl font-bold">
           Craft School – Vacation with Kashmiri Artisan <br />
-          <i className="text-sm">Live the craft Learn the legacy </i>
+          <span className="text-sm italic">Live the craft Learn the legacy </span>
         </h2>
       </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="grid w-full space-y-6 p-3"
+          className="space-y-6 p-6"
         >
           <FormField
             control={form.control}
@@ -379,7 +379,7 @@ export const ArtisanForm = () => {
             )}
           />
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="experienceGoals"
@@ -430,7 +430,7 @@ export const ArtisanForm = () => {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="education"
@@ -478,7 +478,7 @@ export const ArtisanForm = () => {
 
           {/* Dates removed as requested */}
 
-          <Button type="submit" >FIND ARTISAN</Button>
+          <Button type="submit" className="w-full">FIND ARTISAN</Button>
         </form>
       </Form>
     </div>

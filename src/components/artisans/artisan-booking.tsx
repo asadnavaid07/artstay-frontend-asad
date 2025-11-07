@@ -113,15 +113,15 @@ export const ArtisanBookingForm = () => {
   };
 
   return (
-    <div className="grid gap-8 md:grid-cols-3">
+    <div className="grid gap-6 sm:gap-8 md:grid-cols-3">
       {/* Booking Form */}
       <div className="md:col-span-2">
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>Complete Your Booking</CardTitle>
-                <CardDescription>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+              <div className="flex-1 min-w-0">
+                <CardTitle className="text-lg sm:text-xl">Complete Your Booking</CardTitle>
+                <CardDescription className="text-xs sm:text-sm mt-1">
                   Please fill in your details to book your artisan experience.
                 </CardDescription>
               </div>
@@ -129,6 +129,7 @@ export const ArtisanBookingForm = () => {
                 <Button
                   type="button"
                   variant="outline"
+                  className="w-full sm:w-auto text-xs sm:text-sm"
                   onClick={() => router.push(`/artisan/profile?artisanId=${artisanPackage.artisanId}`)}
                 >
                   Back to Profile
@@ -140,9 +141,9 @@ export const ArtisanBookingForm = () => {
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
+                className="space-y-4 sm:space-y-6"
               >
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-4 sm:grid-cols-2">
                   <FormField
                     control={form.control}
                     name="firstName"
@@ -171,17 +172,18 @@ export const ArtisanBookingForm = () => {
                   />
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-4 sm:grid-cols-2">
                   <FormField
                     control={form.control}
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel className="text-sm">Email</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="john.doe@example.com"
                             type="email"
+                            className="text-sm"
                             {...field}
                           />
                         </FormControl>
@@ -194,9 +196,9 @@ export const ArtisanBookingForm = () => {
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Phone</FormLabel>
+                        <FormLabel className="text-sm">Phone</FormLabel>
                         <FormControl>
-                          <Input placeholder="+1 (555) 123-4567" {...field} />
+                          <Input placeholder="+1 (555) 123-4567" className="text-sm" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -243,32 +245,32 @@ export const ArtisanBookingForm = () => {
       </div>
 
       {/* Booking Summary */}
-      <div>
+      <div className="mt-6 md:mt-0">
         <Card>
           <CardHeader>
-            <CardTitle>Booking Summary</CardTitle>
-            <CardDescription>Details of your selected package</CardDescription>
+            <CardTitle className="text-base sm:text-lg">Booking Summary</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">Details of your selected package</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3 sm:space-y-4">
             <div className="rounded-lg bg-muted p-3">
-              <h3 className="font-medium">{artisanPackage.title}</h3>
-              <div className="mt-4 flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm">
-                  <Clock className="h-4 w-4" />
+              <h3 className="font-medium text-sm sm:text-base break-words">{artisanPackage.title}</h3>
+              <div className="mt-3 sm:mt-4 flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs sm:text-sm">
+                  <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span>{artisanPackage.duration} Days</span>
                 </div>
-                <span className="font-semibold">${artisanPackage.amount}</span>
+                <span className="font-semibold text-sm sm:text-base">${artisanPackage.amount}</span>
               </div>
             </div>
 
             <div className="space-y-2">
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between text-xs sm:text-sm">
                 <p className="text-muted-foreground">Start Date</p>
                 <p className="font-medium">
                   {dayjs(artisanPackage.startDate).format("DD.MM.YYYY")}
                 </p>
               </div>
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between text-xs sm:text-sm">
                 <span className="text-muted-foreground">End Date</span>
                 <span className="font-medium">
                   {dayjs(artisanPackage.endDate).format("DD.MM.YYYY")}
@@ -276,15 +278,15 @@ export const ArtisanBookingForm = () => {
               </div>
             </div>
 
-            <div className="border-t pt-4">
-              <div className="flex justify-between">
+            <div className="border-t pt-3 sm:pt-4">
+              <div className="flex justify-between text-sm sm:text-base">
                 <span className="font-semibold">Total Price</span>
                 <span className="font-semibold">${artisanPackage.amount}</span>
               </div>
             </div>
           </CardContent>
-          <CardFooter className="flex flex-col space-y-2 border-t bg-muted/50 px-6 py-4">
-            <p className="text-xs text-muted-foreground">
+          <CardFooter className="flex flex-col space-y-2 border-t bg-muted/50 px-4 sm:px-6 py-3 sm:py-4">
+            <p className="text-[10px] sm:text-xs text-muted-foreground text-center sm:text-left">
               By completing this booking, you agree to our Terms and Conditions
               and Privacy Policy.
             </p>

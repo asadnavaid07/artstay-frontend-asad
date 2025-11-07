@@ -98,10 +98,10 @@ export const DiningFilter = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="-mt-24">
+    <form onSubmit={handleSubmit(onSubmit)} className="-mt-12 sm:-mt-16 md:-mt-20 lg:-mt-24 px-2 sm:px-4 md:px-6">
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="flex h-auto flex-wrap gap-2 bg-transparent p-0">
-          <div className="rounded-b-none rounded-t-lg bg-secondary px-4 py-2 font-text text-lg text-white z-[101] p-3">
+        <TabsList className="flex h-auto flex-wrap gap-1 sm:gap-2 bg-transparent p-0 overflow-x-auto">
+          <div className="rounded-b-none rounded-t-lg bg-secondary px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 font-text text-xs sm:text-sm md:text-base lg:text-lg text-white z-[101] whitespace-nowrap">
             <b>DINING VOYAGE</b>
           </div>
           {[
@@ -112,19 +112,19 @@ export const DiningFilter = () => {
             <TabsTrigger
               key={tab.id}
               value={tab.id}
-              className="rounded-b-none rounded-t-lg bg-gray-200 px-4 py-2 font-text text-lg text-gray-950 backdrop-blur hover:bg-primary hover:text-white data-[state=active]:text-primary"
+              className="rounded-b-none rounded-t-lg bg-gray-200 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 font-text text-xs sm:text-sm md:text-base lg:text-lg text-gray-950 backdrop-blur hover:bg-primary hover:text-white data-[state=active]:text-primary whitespace-nowrap"
             >
-              <span className="mr-2">+</span>
+              <span className="mr-1 sm:mr-2">+</span>
               {tab.label}
             </TabsTrigger>
           ))}
         </TabsList>
-        <div className="rounded-lg bg-white/90 p-6 shadow-lg backdrop-blur">
+        <div className="rounded-lg bg-white/90 p-3 sm:p-4 md:p-6 shadow-lg backdrop-blur">
           <TabsContent value="general">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2">
               <div>
-                <label className="mb-2 flex items-center gap-2">
-                  <Search className="h-4 w-4" /> Restaurant Search
+                <label className="mb-1.5 sm:mb-2 flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium">
+                  <Search className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Restaurant Search
                 </label>
                 <Controller
                   name="search"
@@ -134,14 +134,15 @@ export const DiningFilter = () => {
                       placeholder="Search restaurants..."
                       value={field.value}
                       onChange={field.onChange}
+                      className="text-xs sm:text-sm h-9 sm:h-10"
                     />
                   )}
                 />
               </div>
 
               <div>
-                <label className="mb-2 flex items-center gap-2">
-                  <MapPin className="h-4 w-4" /> Location
+                <label className="mb-1.5 sm:mb-2 flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium">
+                  <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Location
                 </label>
                 <Controller
                   name="location"
@@ -151,13 +152,13 @@ export const DiningFilter = () => {
                       value={field.value} 
                       onValueChange={field.onChange}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="text-xs sm:text-sm h-9 sm:h-10">
                         <SelectValue placeholder="Select location" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="vaue" disabled>All Locations</SelectItem>
+                        <SelectItem value="vaue" disabled className="text-xs sm:text-sm">All Locations</SelectItem>
                         {filterOptions.locations.map((location: string) => (
-                          <SelectItem key={location} value={location}>
+                          <SelectItem key={location} value={location} className="text-xs sm:text-sm">
                             {location}
                           </SelectItem>
                         ))}
@@ -170,10 +171,10 @@ export const DiningFilter = () => {
           </TabsContent>
 
           <TabsContent value="cuisine">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2">
               <div>
-                <label className="mb-2 flex items-center gap-2">
-                  <Utensils className="h-4 w-4" /> Cuisine Type
+                <label className="mb-1.5 sm:mb-2 flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium">
+                  <Utensils className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Cuisine Type
                 </label>
                 <Controller
                   name="cuisine"
@@ -183,13 +184,13 @@ export const DiningFilter = () => {
                       value={field.value} 
                       onValueChange={field.onChange}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="text-xs sm:text-sm h-9 sm:h-10">
                         <SelectValue placeholder="Select cuisine" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="vaue" disabled>All Cuisines</SelectItem>
+                        <SelectItem value="vaue" disabled className="text-xs sm:text-sm">All Cuisines</SelectItem>
                         {filterOptions.cuisines.map((cuisine: string) => (
-                          <SelectItem key={cuisine} value={cuisine}>
+                          <SelectItem key={cuisine} value={cuisine} className="text-xs sm:text-sm">
                             {cuisine}
                           </SelectItem>
                         ))}
@@ -200,22 +201,22 @@ export const DiningFilter = () => {
               </div>
 
               <div>
-                <label className="mb-2 block">Price Range</label>
+                <label className="mb-1.5 sm:mb-2 block text-xs sm:text-sm font-medium">Price Range</label>
                 <Controller
                   name="priceRange"
                   control={control}
                   render={({ field }) => (
                     <Select 
-                      value={field.value} 
+                      value={field.value}
                       onValueChange={field.onChange}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="text-xs sm:text-sm h-9 sm:h-10">
                         <SelectValue placeholder="Select price range" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="vaue" disabled>All Price Ranges</SelectItem>
+                        <SelectItem value="vaue" disabled className="text-xs sm:text-sm">All Price Ranges</SelectItem>
                         {filterOptions.priceRanges.map((range: string) => (
-                          <SelectItem key={range} value={range}>
+                          <SelectItem key={range} value={range} className="text-xs sm:text-sm">
                             {PRICE_RANGE_LABELS[range as keyof typeof PRICE_RANGE_LABELS] || range}
                           </SelectItem>
                         ))}
@@ -228,7 +229,7 @@ export const DiningFilter = () => {
           </TabsContent>
 
           <TabsContent value="dietary">
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center space-x-2">
                 <Controller
                   name="isVegetarian"
@@ -238,12 +239,13 @@ export const DiningFilter = () => {
                       id="isVegetarian"
                       checked={field.value}
                       onCheckedChange={field.onChange}
+                      className="h-4 w-4 sm:h-5 sm:w-5"
                     />
                   )}
                 />
                 <label
                   htmlFor="isVegetarian"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-xs sm:text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                 >
                   Vegetarian Options Only
                 </label>
@@ -258,12 +260,13 @@ export const DiningFilter = () => {
                       id="isVegan"
                       checked={field.value}
                       onCheckedChange={field.onChange}
+                      className="h-4 w-4 sm:h-5 sm:w-5"
                     />
                   )}
                 />
                 <label
                   htmlFor="isVegan"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-xs sm:text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                 >
                   Vegan Options Only
                 </label>
@@ -278,12 +281,13 @@ export const DiningFilter = () => {
                       id="isGlutenFree"
                       checked={field.value}
                       onCheckedChange={field.onChange}
+                      className="h-4 w-4 sm:h-5 sm:w-5"
                     />
                   )}
                 />
                 <label
                   htmlFor="isGlutenFree"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-xs sm:text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                 >
                   Gluten-Free Options Only
                 </label>
@@ -291,12 +295,12 @@ export const DiningFilter = () => {
             </div>
           </TabsContent>
 
-          <div className="mt-8 flex gap-4">
-            <Button type="submit">
-              <Search className="h-4 w-4 mr-2" />
+          <div className="mt-4 sm:mt-6 md:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <Button type="submit" className="w-full sm:w-auto text-xs sm:text-sm md:text-base px-4 sm:px-6 py-2 sm:py-3">
+              <Search className="h-3 w-3 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
               Find Restaurants
             </Button>
-            <Button type="button" variant="outline" onClick={handleReset}>
+            <Button type="button" variant="outline" onClick={handleReset} className="w-full sm:w-auto text-xs sm:text-sm md:text-base px-4 sm:px-6 py-2 sm:py-3">
               Reset Filters
             </Button>
           </div>

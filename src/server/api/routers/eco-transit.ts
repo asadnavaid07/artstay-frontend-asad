@@ -129,16 +129,39 @@ export const ecoTransitRouter = createTRPCRouter({
   }),
   getApplicationStatus: publicProcedure.query(async ({ ctx }) => {
     try {
-      const response = await axios.get<ApiResponseProps<EcoTransitProps>>(
+      const response = await axios.get<ApiResponseProps<EcoTransitProps | null>>(
         `${env.API_URL}/eco-transit/application-status/${ctx.session?.user.id}`,
       );
+      
+      // Check if the response indicates an error
+      if (response.data.status === "error") {
+        throw new TRPCError({
+          message: response.data.message || "Failed to fetch application status",
+          code: "BAD_REQUEST",
+        });
+      }
+      
       return response.data.data;
     } catch (error) {
+      if (error instanceof TRPCError) {
+        throw error;
+      }
       if (error instanceof TRPCClientError) {
         throw new TRPCError({ message: error.message, code: "NOT_FOUND" });
       } else if (error instanceof AxiosError) {
+        const responseData = error.response?.data as ApiResponseProps<null> | { errors: string[] };
+        
+        // Check if it's the expected error format from our backend
+        if (responseData && "status" in responseData && responseData.status === "error") {
+          throw new TRPCError({
+            message: responseData.message || "Failed to fetch application status",
+            code: "BAD_REQUEST",
+          });
+        }
+        
+        // Handle other error formats
         throw new TRPCError({
-          message: (error.response?.data as { errors: string[] })?.errors?.[0] ?? "Unknown error",
+          message: (responseData as { errors: string[] })?.errors?.[0] ?? "Unknown error",
           code: "BAD_REQUEST",
         });
       }

@@ -17,7 +17,7 @@ export default async function BookingPage({ searchParams }: PageProps) {
     roomId: serachProps.roomId,
   });
   return (
-    <div className="mt-12 grid gap-4">
+    <div className="mt-6 sm:mt-8 md:mt-10 lg:mt-12 grid gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 md:px-8 max-w-7xl mx-auto">
       <RoomInput room={room} />
        <RoomCalendar room={room} />
     </div>

@@ -1,3 +1,220 @@
+// "use client";
+// import { useState } from "react";
+// import { ChevronLeft, ChevronRight } from "lucide-react";
+// import { Button } from "~/components/ui/button";
+// import dayjs, { type Dayjs } from "dayjs";
+// import isBetween from "dayjs/plugin/isBetween";
+// import weekday from "dayjs/plugin/weekday";
+// import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+// import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+// import { useSafari } from "~/hooks/use-safari";
+// import { useRouter } from "next/navigation";
+
+// dayjs.extend(isBetween);
+// dayjs.extend(weekday);
+// dayjs.extend(isSameOrBefore);
+// dayjs.extend(isSameOrAfter);
+
+// interface CalendarDay {
+//   date: Dayjs;
+//   isCurrentMonth: boolean;
+//   isDisabled: boolean;
+// }
+
+// const weekDays: readonly string[] = [
+//   "Su",
+//   "Mo",
+//   "Tu",
+//   "We",
+//   "Th",
+//   "Fr",
+//   "Sa",
+// ] as const;
+
+// export const SafariCalendar = () => {
+//   const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
+//   const { safariPackage, setPackage } = useSafari();
+//   const router = useRouter()
+
+//   const generateCalendarDays = (date: Dayjs): CalendarDay[] => {
+//     const firstDayOfMonth = date.startOf("month");
+//     const lastDayOfMonth = date.endOf("month");
+//     const startDay = firstDayOfMonth.day(); // Get day of week (0-6)
+//     const daysInMonth = date.daysInMonth();
+//     const currentDate = dayjs(); // For comparing with today
+
+//     const days: CalendarDay[] = [];
+
+//     // Previous month's days
+//     for (let i = 0; i < startDay; i++) {
+//       const prevDate = firstDayOfMonth.subtract(startDay - i, "day");
+//       days.push({
+//         date: prevDate,
+//         isCurrentMonth: false,
+//         isDisabled: true, // Always disable previous month's days
+//       });
+//     }
+
+//     // Current month's days
+//     for (let i = 1; i <= daysInMonth; i++) {
+//       const currentDayDate = firstDayOfMonth.add(i - 1, "day");
+//       days.push({
+//         date: currentDayDate,
+//         isCurrentMonth: true,
+//         isDisabled: currentDayDate.isBefore(currentDate, "day"), // Disable if date is before today
+//       });
+//     }
+
+//     // Next month's days to complete the calendar grid
+//     const remainingDays = 42 - days.length; // 6 rows * 7 days = 42
+//     for (let i = 1; i <= remainingDays; i++) {
+//       const nextDate = lastDayOfMonth.add(i, "day");
+//       days.push({
+//         date: nextDate,
+//         isCurrentMonth: false,
+//         isDisabled: true,
+//       });
+//     }
+
+//     return days;
+//   };
+
+//   const handleDateClick = (day: CalendarDay) => {
+//     if (day.isDisabled) return;
+
+//     // For Safari, we only need a single date
+//     setPackage({
+//       date: day.date.format("YYYY-MM-DD"),
+//     });
+//   };
+
+//   const isDateSelected = (date: Dayjs): boolean => {
+//     return date.format("YYYY-MM-DD") === safariPackage.date;
+//   };
+
+//   const nextMonth = (): void => setCurrentDate(currentDate.add(1, "month"));
+//   const prevMonth = (): void =>
+//     setCurrentDate(currentDate.subtract(1, "month"));
+
+//   const renderCalendarMonth = (date: Dayjs) => (
+//     <div className="w-full">
+//       <h2 className="mb-4 text-center font-heading text-base font-extrabold text-gray-900">
+//         {date.format("MMMM YYYY")}
+//       </h2>
+//       <div className="grid grid-cols-7 gap-1">
+//         {weekDays.map((day) => (
+//           <div
+//             key={day}
+//             className="mb-1 text-center text-sm font-bold text-primary"
+//           >
+//             {day}
+//           </div>
+//         ))}
+
+//         {generateCalendarDays(date).map((day, index) => {
+//           const isSelected = isDateSelected(day.date);
+
+//           return (
+//             <Button
+//               type="button"
+//               key={index}
+//               onClick={() => handleDateClick(day)}
+//               disabled={day.isDisabled}
+//               variant={isSelected ? "default" : "outline"}
+//               className={`h-12 w-full ${
+//                 day.isCurrentMonth ? "" : "opacity-40"
+//               } ${
+//                 isSelected ? "bg-primary text-white hover:bg-primary/90" : ""
+//               }`}
+//             >
+//               {day.date.date()}
+//             </Button>
+//           );
+//         })}
+//       </div>
+//     </div>
+//   );
+
+//   return (
+//     <>
+//       {safariPackage.date && safariPackage.tour && (
+//         <div className="mb-8 space-y-4 rounded-lg border bg-secondary/5 p-4">
+//           <div className="flex items-center justify-between">
+//             <h3 className="text-lg font-semibold text-secondary">
+//               Selected Safari Tour
+//             </h3>
+//             <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+//               ${safariPackage.tour.fee.toLocaleString()}
+//             </span>
+//           </div>
+
+//           <div className="flex items-center justify-between text-sm">
+//             <span className="text-muted-foreground">Tour:</span>
+//             <span className="font-medium text-secondary">
+//               {safariPackage.tour.title}
+//             </span>
+//           </div>
+
+//           <div className="flex items-center justify-between text-sm">
+//             <span className="text-muted-foreground">Selected Date:</span>
+//             <span className="font-medium">
+//               {dayjs(safariPackage.date).format("MMM D, YYYY")}
+//             </span>
+//           </div>
+//         </div>
+//       )}
+
+//       {!safariPackage.tour && (
+//         <div className="mb-8 rounded-lg border bg-amber-50 p-4 text-amber-800">
+//           <p className="text-center">
+//             Please select a safari tour first to continue with booking.
+//           </p>
+//         </div>
+//       )}
+
+//       {safariPackage.tour && (
+//         <>
+//           <div className="flex items-center justify-between">
+//             <Button
+//               variant="outline"
+//               size="icon"
+//               onClick={prevMonth}
+//               className="h-8 w-8"
+//             >
+//               <ChevronLeft className="h-4 w-4" />
+//             </Button>
+//             <h3 className="text-lg font-medium">Select Date</h3>
+//             <Button
+//               variant="outline"
+//               size="icon"
+//               onClick={nextMonth}
+//               className="h-8 w-8"
+//             >
+//               <ChevronRight className="h-4 w-4" />
+//             </Button>
+//           </div>
+
+//           <div className="mt-4 grid gap-8">
+//             {renderCalendarMonth(currentDate)}
+//           </div>
+//           <div>
+//             <Button
+//               type="button"
+//               disabled={safariPackage.date == ""}
+//               onClick={() => {
+//                 router.push("/safari/booking");
+//               }}
+//             >
+//               Continue
+//             </Button>
+//           </div>
+//         </>
+//       )}
+//     </>
+//   );
+// };
+
+
 "use client";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -39,9 +256,9 @@ export const SafariCalendar = () => {
   const generateCalendarDays = (date: Dayjs): CalendarDay[] => {
     const firstDayOfMonth = date.startOf("month");
     const lastDayOfMonth = date.endOf("month");
-    const startDay = firstDayOfMonth.day(); // Get day of week (0-6)
+    const startDay = firstDayOfMonth.day();
     const daysInMonth = date.daysInMonth();
-    const currentDate = dayjs(); // For comparing with today
+    const currentDate = dayjs();
 
     const days: CalendarDay[] = [];
 
@@ -51,7 +268,7 @@ export const SafariCalendar = () => {
       days.push({
         date: prevDate,
         isCurrentMonth: false,
-        isDisabled: true, // Always disable previous month's days
+        isDisabled: true,
       });
     }
 
@@ -61,12 +278,12 @@ export const SafariCalendar = () => {
       days.push({
         date: currentDayDate,
         isCurrentMonth: true,
-        isDisabled: currentDayDate.isBefore(currentDate, "day"), // Disable if date is before today
+        isDisabled: currentDayDate.isBefore(currentDate, "day"),
       });
     }
 
     // Next month's days to complete the calendar grid
-    const remainingDays = 42 - days.length; // 6 rows * 7 days = 42
+    const remainingDays = 42 - days.length;
     for (let i = 1; i <= remainingDays; i++) {
       const nextDate = lastDayOfMonth.add(i, "day");
       days.push({
@@ -98,14 +315,14 @@ export const SafariCalendar = () => {
 
   const renderCalendarMonth = (date: Dayjs) => (
     <div className="w-full">
-      <h2 className="mb-4 text-center font-heading text-base font-extrabold text-gray-900">
+      <h2 className="mb-3 sm:mb-4 text-center text-base sm:text-lg font-bold text-gray-900">
         {date.format("MMMM YYYY")}
       </h2>
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-0.5 sm:gap-1">
         {weekDays.map((day) => (
           <div
             key={day}
-            className="mb-1 text-center text-sm font-bold text-primary"
+            className="mb-1 text-center text-[10px] sm:text-xs md:text-sm font-bold text-primary"
           >
             {day}
           </div>
@@ -121,7 +338,7 @@ export const SafariCalendar = () => {
               onClick={() => handleDateClick(day)}
               disabled={day.isDisabled}
               variant={isSelected ? "default" : "outline"}
-              className={`h-12 w-full ${
+              className={`h-10 sm:h-12 md:h-14 w-full text-xs sm:text-sm ${
                 day.isCurrentMonth ? "" : "opacity-40"
               } ${
                 isSelected ? "bg-primary text-white hover:bg-primary/90" : ""
@@ -138,24 +355,24 @@ export const SafariCalendar = () => {
   return (
     <>
       {safariPackage.date && safariPackage.tour && (
-        <div className="mb-8 space-y-4 rounded-lg border bg-secondary/5 p-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-secondary">
+        <div className="mb-4 sm:mb-6 md:mb-8 space-y-3 sm:space-y-4 rounded-lg border bg-secondary/5 p-3 sm:p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <h3 className="text-base sm:text-lg font-semibold text-secondary">
               Selected Safari Tour
             </h3>
-            <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+            <span className="rounded-full bg-primary/10 px-2.5 sm:px-3 py-1 text-xs sm:text-sm font-medium text-primary self-start">
               ${safariPackage.tour.fee.toLocaleString()}
             </span>
           </div>
 
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-sm sm:text-base">
             <span className="text-muted-foreground">Tour:</span>
             <span className="font-medium text-secondary">
               {safariPackage.tour.title}
             </span>
           </div>
 
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-sm sm:text-base">
             <span className="text-muted-foreground">Selected Date:</span>
             <span className="font-medium">
               {dayjs(safariPackage.date).format("MMM D, YYYY")}
@@ -165,8 +382,8 @@ export const SafariCalendar = () => {
       )}
 
       {!safariPackage.tour && (
-        <div className="mb-8 rounded-lg border bg-amber-50 p-4 text-amber-800">
-          <p className="text-center">
+        <div className="mb-4 sm:mb-6 md:mb-8 rounded-lg border border-amber-200 bg-amber-50 p-3 sm:p-4 text-amber-800">
+          <p className="text-center text-sm sm:text-base">
             Please select a safari tour first to continue with booking.
           </p>
         </div>
@@ -174,32 +391,33 @@ export const SafariCalendar = () => {
 
       {safariPackage.tour && (
         <>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
             <Button
               variant="outline"
               size="icon"
               onClick={prevMonth}
-              className="h-8 w-8"
+              className="h-8 w-8 sm:h-9 sm:w-9"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <h3 className="text-lg font-medium">Select Date</h3>
+            <h3 className="text-base sm:text-lg font-medium">Select Date</h3>
             <Button
               variant="outline"
               size="icon"
               onClick={nextMonth}
-              className="h-8 w-8"
+              className="h-8 w-8 sm:h-9 sm:w-9"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
 
-          <div className="mt-4 grid gap-8">
+          <div className="mt-3 sm:mt-4 grid gap-4 sm:gap-6 md:gap-8">
             {renderCalendarMonth(currentDate)}
           </div>
-          <div>
+          <div className="mt-4 sm:mt-6">
             <Button
               type="button"
+              className="w-full sm:w-auto sm:min-w-[200px]"
               disabled={safariPackage.date == ""}
               onClick={() => {
                 router.push("/safari/booking");

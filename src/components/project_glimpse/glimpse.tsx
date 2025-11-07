@@ -3,33 +3,33 @@ import Image from "next/image";
 
 export default function ProjectGlimpse() {
   return (
-    <div className="w-full bg-[#C8E8F9] py-16">
-        <div className="max-w-6xl mx-auto px-6 rounded-2xl shadow-lg bg-[#F5FBFD]/80 hover:bg-[#0085CC]/5  border border-[#0085CC]/10">
+    <div className="w-full bg-[#C8E8F9] py-8 sm:py-12 md:py-16 lg:py-20 overflow-x-hidden">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 rounded-2xl shadow-lg bg-[#F5FBFD]/80 hover:bg-[#0085CC]/5 border border-[#0085CC]/10 w-full min-w-0">
         {/* Header */}
-        <div className="text-center mt-10 mb-12">
-          <h2 className="text-3xl font-bold text-[#0085CC] mb-2 tracking-tight">Project Glimpse</h2>
-          <div className="flex justify-center mb-4">
-            <span className="inline-block w-16 h-1 rounded bg-[#0085CC] opacity-70"></span>
+        <div className="text-center mt-6 sm:mt-8 md:mt-10 mb-8 sm:mb-10 md:mb-12 px-2">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#0085CC] mb-2 sm:mb-3 tracking-tight">Project Glimpse</h2>
+          <div className="flex justify-center mb-3 sm:mb-4">
+            <span className="inline-block w-12 sm:w-16 h-0.5 sm:h-1 rounded bg-[#0085CC] opacity-70"></span>
           </div>
-          <p className="text-[#005380] text-lg font-semibold mb-8">
-            The convergence of Kashmir&apos;s Tourism and Handicrafts. <br />  Kashmir&apos;s Largest Shared Vision for Craft & Culture
+          <p className="text-[#005380] text-sm sm:text-base md:text-lg lg:text-xl font-semibold mb-6 sm:mb-8 leading-relaxed px-2">
+            The convergence of Kashmir&apos;s Tourism and Handicrafts. <br className="hidden sm:block" />  Kashmir&apos;s Largest Shared Vision for Craft & Culture
           </p>
           {/* Description Text */}
-          <div className="flex items-center justify-between gap-8 flex-col md:flex-row">
+          <div className="flex items-center justify-between gap-3 sm:gap-4 md:gap-6 lg:gap-8 flex-col md:flex-row w-full min-w-0">
             {/* Left Logo - Passionistas Project */}
-            <div className="flex-shrink-0 w-44 h-28 relative bg-gradient-to-br from-[#E6F4FB] to-[#B3E0F7] rounded-xl border border-[#0085CC]/20 shadow-sm flex items-center justify-center">
+            <div className="flex-shrink-0 w-28 h-18 sm:w-32 sm:h-20 md:w-36 md:h-24 lg:w-44 lg:h-28 relative bg-gradient-to-br from-[#E6F4FB] to-[#B3E0F7] rounded-xl border border-[#0085CC]/20 shadow-sm flex items-center justify-center">
               <Image
                 src="/images/project_glimpse/project_glimpse_1.png"
                 alt="The Passionistas Project Logo"
                 fill
-                className="object-contain"
+                className="object-contain p-2"
                 priority
               />
             </div>
 
             {/* Center Text */}
-            <div className="flex-1 text-center px-2">
-              <p className="text-[#005380] text-base md:text-lg leading-relaxed font-medium">
+            <div className="flex-1 text-center px-2 sm:px-4 min-w-0">
+              <p className="text-[#005380] text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed font-medium break-words">
                 For Kashmir&apos;s Local Artisans, Project Offers A New Lifeline
                 <br />
                 <span className="text-[#0085CC] font-semibold">Developing Kashmir&apos;s Art & Craft Profile At</span>
@@ -40,12 +40,12 @@ export default function ProjectGlimpse() {
             </div>
 
             {/* Right Logo - Placeholder */}
-            <div className="flex-shrink-0 w-44 h-28 relative bg-gradient-to-br from-[#E6F4FB] to-[#B3E0F7] rounded-xl border border-[#0085CC]/20 shadow-sm flex items-center justify-center">
+            <div className="flex-shrink-0 w-28 h-18 sm:w-32 sm:h-20 md:w-36 md:h-24 lg:w-44 lg:h-28 relative bg-gradient-to-br from-[#E6F4FB] to-[#B3E0F7] rounded-xl border border-[#0085CC]/20 shadow-sm flex items-center justify-center">
               <Image
                 src="/images/project_glimpse/project_glimpse_2.png"
                 alt="The Passionistas Project Logo"
                 fill
-                className="object-contain"
+                className="object-contain p-2"
                 priority
               />
             </div>

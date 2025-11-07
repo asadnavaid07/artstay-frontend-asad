@@ -378,16 +378,52 @@ export const LanguageServiceForm = () => {
                   <FormDescription>Upload a professional photo</FormDescription>
                   <FormControl>
                     <div className="flex items-start gap-4">
+                      {field.value && field.value !== "" && field.value !== "/placeholder.png" ? (
+                        <div className="relative h-24 w-24 overflow-hidden rounded-lg border-2 border-primary/20">
+                          <img
+                            src={field.value}
+                            alt="Profile preview"
+                            className="h-full w-full object-cover"
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            className="absolute right-1 top-1 h-6 w-6 p-0"
+                            onClick={() => field.onChange("")}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      ) : null}
                       <UploadButton
                         endpoint="imageUploader"
-                        onClientUploadComplete={(res) =>
-                          field.onChange(res[0]?.appUrl)
-                        }
+                        onClientUploadComplete={(res) => {
+                          if (res && res[0]?.appUrl) {
+                            field.onChange(res[0].appUrl);
+                            toast({
+                              title: "Success",
+                              description: "Profile picture uploaded successfully",
+                            });
+                          } else {
+                            toast({
+                              variant: "destructive",
+                              title: "Upload Failed",
+                              description: "No file URL received from upload",
+                            });
+                          }
+                        }}
                         onUploadError={(error: Error) => {
                           toast({
                             variant: "destructive",
                             title: "Upload Failed",
                             description: error.message,
+                          });
+                        }}
+                        onUploadBegin={(name) => {
+                          toast({
+                            title: "Uploading...",
+                            description: `Uploading ${name}`,
                           });
                         }}
                       />

@@ -86,7 +86,7 @@ export const TourForm = () => {
   }
 
   return (
-    <div className="z-[100] -mt-[100] mx-auto w-full max-w-xl rounded-lg bg-white shadow-lg">
+    <div className="z-[100] mx-auto w-full max-w-xl rounded-lg bg-white shadow-lg">
       <div className="rounded-t-lg bg-primary p-4 text-white border-white border-2">
         <h2 className="text-center text-xl font-bold">Find an ArtStay Traditional Kashmir Tour <br /> <span className='text-sm italic'>Not Just a Trip, A Journey into Kashmir&apos;s Soul & Heritage</span></h2>
 

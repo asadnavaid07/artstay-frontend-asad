@@ -131,7 +131,7 @@ const specialityOptions = [
   { id: "family", label: "Family Trips" },
 ];
 
-export const TravelerForm = () => {
+export const TravelerForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const { toast } = useToast();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -152,6 +152,10 @@ export const TravelerForm = () => {
         description: "Travel planner profile created successfully.",
       });
       form.reset();
+      // Call the onSuccess callback if provided (e.g., to refetch application status)
+      if (onSuccess) {
+        onSuccess();
+      }
     },
     onError: (error) => {
       toast({

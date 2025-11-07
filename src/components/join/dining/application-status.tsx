@@ -75,7 +75,10 @@ export const DiningRegistrationStatus = () => {
 
   // User is logged in and has an application
   if (session.status === "authenticated" && diningData) {
-    const isApproved = diningData.isActive === "true";
+    // Handle both string "true" and boolean true
+    const isApproved = diningData.isActive === "true" || (diningData.isActive as unknown as boolean) === true;
+    console.log("diningData.isActive", diningData.isActive);
+    console.log("isApproved", isApproved);
 
     return (
       <Card className="overflow-hidden border-gray-200 shadow-sm">

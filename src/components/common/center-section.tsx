@@ -10,5 +10,5 @@ export const CenterSection: React.FC<ContainerProps> = ({
   children,
   className = "",
 }) => {
-  return <section className={cn("mx-auto  max-w-7xl", className)}>{children}</section>;
+  return <section className={cn("mx-auto max-w-7xl w-full min-w-0 overflow-x-hidden", className)}>{children}</section>;
 };

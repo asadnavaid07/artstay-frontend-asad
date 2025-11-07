@@ -77,8 +77,8 @@ export const SafariList = () => {
   }, [safaris, craftVillagesFilter, featuresFilter]);
 
   return (
-    <div className="px-4 py-8">
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="px-2 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filteredSafaris.length > 0 ? (
           filteredSafaris.map((safari: SafariProps, index: number) => (
             <Card
@@ -89,9 +89,9 @@ export const SafariList = () => {
               }
             >
               <div className="relative">
-                <Badge className="absolute left-4 top-4 z-10">Featured</Badge>
+                <Badge className="absolute left-3 sm:left-4 top-3 sm:top-4 z-10 text-xs">Featured</Badge>
 
-                <div className="relative h-72">
+                <div className="relative h-48 sm:h-56 md:h-64 lg:h-72">
                   <Image
                     src={safari.dp === '' ? '/placeholder.png' : safari.dp}
                     alt={`${safari.firstName} ${safari.lastName}`}
@@ -102,26 +102,26 @@ export const SafariList = () => {
                 </div>
               </div>
 
-              <div className="p-4">
-                <h3 className="text-xl font-semibold text-secondary">
+              <div className="p-3 sm:p-4 md:p-5">
+                <h3 className="text-lg sm:text-xl font-semibold text-secondary">
                   {safari.firstName} {safari.lastName}
                 </h3>
 
-                <p className="mt-2 line-clamp-2 text-sm text-gray-600">
+                <p className="mt-2 line-clamp-2 text-xs sm:text-sm text-gray-600">
                   {safari.description}
                 </p>
 
-                <div className="mt-4 flex items-center text-gray-500">
-                  <MapPin className="mr-2 h-4 w-4" />
-                  <span className="text-sm">{safari.address}</span>
+                <div className="mt-3 sm:mt-4 flex items-center text-gray-500">
+                  <MapPin className="mr-2 h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                  <span className="text-xs sm:text-sm line-clamp-1">{safari.address}</span>
                 </div>
               </div>
             </Card>
           ))
         ) : (
-          <div className="col-span-full text-center py-12">
-            <h3 className="text-lg font-medium text-gray-900">No safaris found</h3>
-            <p className="mt-2 text-sm text-gray-500">Try adjusting your filters to see more results.</p>
+          <div className="col-span-full text-center py-8 sm:py-12">
+            <h3 className="text-base sm:text-lg font-medium text-gray-900">No safaris found</h3>
+            <p className="mt-2 text-xs sm:text-sm text-gray-500">Try adjusting your filters to see more results.</p>
           </div>
         )}
       </div>

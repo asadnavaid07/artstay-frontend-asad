@@ -129,10 +129,10 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="-mt-24">
+    <form onSubmit={handleSubmit(onSubmit)} className="-mt-8 sm:-mt-12 md:-mt-16 lg:-mt-20 xl:-mt-24 px-2 sm:px-3 md:px-4 lg:px-6">
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="flex h-auto flex-wrap gap-2 bg-transparent p-0">
-          <div className="rounded-b-none rounded-t-lg bg-secondary px-4 py-2 font-text text-lg text-white z-[101] p-3">
+        <TabsList className="flex h-auto flex-wrap gap-1 sm:gap-2 bg-transparent p-0 overflow-x-auto pb-1 sm:pb-0">
+          <div className="rounded-b-none rounded-t-lg bg-secondary px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 font-text text-[10px] xs:text-xs sm:text-sm md:text-base lg:text-lg text-white z-[101] whitespace-nowrap flex-shrink-0">
             <b>ARTISAN RESOURCES</b>
           </div>
           {[
@@ -144,29 +144,29 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
             <TabsTrigger
               key={tab.id}
               value={tab.id}
-              className="rounded-b-none rounded-t-lg bg-gray-200 px-4 py-2 font-text text-lg text-gray-950 backdrop-blur hover:bg-primary hover:text-white data-[state=active]:text-primary"
+              className="rounded-b-none rounded-t-lg bg-gray-200 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 font-text text-[10px] xs:text-xs sm:text-sm md:text-base lg:text-lg text-gray-950 backdrop-blur hover:bg-primary hover:text-white data-[state=active]:text-primary whitespace-nowrap flex-shrink-0"
             >
-              <span className="mr-2">+</span>
+              <span className="mr-1 sm:mr-2">+</span>
               {tab.label}
             </TabsTrigger>
           ))}
         </TabsList>
-        <div className="rounded-lg bg-white/90 p-6 shadow-lg backdrop-blur">
+        <div className="rounded-lg bg-white/90 p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg backdrop-blur">
           <TabsContent value="craft">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+            <div className="grid grid-cols-1 gap-3 sm:gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-4">
               <div className="col-span-1">
-                <label className="mb-2 block">Selected Craft</label>
+                <label className="mb-1.5 sm:mb-2 block text-xs sm:text-sm font-medium">Selected Craft</label>
                 <Controller
                   name="craft"
                   control={control}
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
+                      <SelectTrigger className="text-xs sm:text-sm h-9 sm:h-10">
                         <SelectValue placeholder="-- Select Craft --" />
                       </SelectTrigger>
                       <SelectContent>
                         {crafts.map((craft: CraftProps) => (
-                          <SelectItem key={craft.craftId} value={craft.craftId}>
+                          <SelectItem key={craft.craftId} value={craft.craftId} className="text-xs sm:text-sm">
                             {craft.craftName}
                           </SelectItem>
                         ))}
@@ -177,28 +177,28 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
               </div>
 
               <div className="col-span-1">
-                <label className="mb-2 block">Selected Sub-Craft</label>
+                <label className="mb-1.5 sm:mb-2 block text-xs sm:text-sm font-medium">Selected Sub-Craft</label>
                 <Controller
                   name="subCraft"
                   control={control}
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
+                      <SelectTrigger className="text-xs sm:text-sm h-9 sm:h-10">
                         <SelectValue placeholder="-- Select Sub Craft --" />
                       </SelectTrigger>
                       <SelectContent>
                         {subCrafts.data?.map((subCraft: SubCraftProps) => (
-                          <SelectItem key={subCraft.subCraftId} value={subCraft.subCraftId}>
+                          <SelectItem key={subCraft.subCraftId} value={subCraft.subCraftId} className="text-xs sm:text-sm">
                             {subCraft.subCraftName}
                           </SelectItem>
                         ))}
                         {subCrafts.isLoading && (
-                          <SelectItem value="loading" disabled>
+                          <SelectItem value="loading" disabled className="text-xs sm:text-sm">
                             Loading...
                           </SelectItem>
                         )}
                         {!watchedCraft && (
-                          <SelectItem value="loading" disabled>
+                          <SelectItem value="loading" disabled className="text-xs sm:text-sm">
                             Select a craft first
                           </SelectItem>
                         )}
@@ -210,7 +210,7 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
 
               {/* Experience (maps to expertise) */}
               <div>
-                <label className="mb-2 block">Experience</label>
+                <label className="mb-1.5 sm:mb-2 block text-xs sm:text-sm font-medium">Experience</label>
                 <Controller
                   name="expertise"
                   control={control}
@@ -219,14 +219,14 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
                       value={Array.isArray(field.value) ? (field.value[0] ?? "") : ""}
                       onValueChange={(val) => setValue("expertise", val ? [val] : [])}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="text-xs sm:text-sm h-9 sm:h-10">
                         <SelectValue placeholder="-- Select Experience --" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="GRANDMASTER">Grandmaster</SelectItem>
-                        <SelectItem value="MASTER">Master Craftsman</SelectItem>
-                        <SelectItem value="CRAFTMAN">Craftsman</SelectItem>
-                        <SelectItem value="APPRENTICE">Apprentice</SelectItem>
+                        <SelectItem value="GRANDMASTER" className="text-xs sm:text-sm">Grandmaster</SelectItem>
+                        <SelectItem value="MASTER" className="text-xs sm:text-sm">Master Craftsman</SelectItem>
+                        <SelectItem value="CRAFTMAN" className="text-xs sm:text-sm">Craftsman</SelectItem>
+                        <SelectItem value="APPRENTICE" className="text-xs sm:text-sm">Apprentice</SelectItem>
                       </SelectContent>
                     </Select>
                   )}
@@ -235,18 +235,18 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
 
               {/* Education */}
               <div>
-                <label className="mb-2 block">Education</label>
+                <label className="mb-1.5 sm:mb-2 block text-xs sm:text-sm font-medium">Education</label>
                 <Controller
                   name="education"
                   control={control}
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
+                      <SelectTrigger className="text-xs sm:text-sm h-9 sm:h-10">
                         <SelectValue placeholder="-- Select Education --" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="FORMAL">Formal</SelectItem>
-                        <SelectItem value="NON_FORMAL">Non-Formal</SelectItem>
+                        <SelectItem value="FORMAL" className="text-xs sm:text-sm">Formal</SelectItem>
+                        <SelectItem value="NON_FORMAL" className="text-xs sm:text-sm">Non-Formal</SelectItem>
                       </SelectContent>
                     </Select>
                   )}
@@ -255,10 +255,10 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
             </div>
           </TabsContent>
 
-          <TabsContent value="rating" className="space-y-4">
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
+          <TabsContent value="rating" className="space-y-3 sm:space-y-4">
+            <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
               {[5, 4, 3, 2, 1].map((stars) => (
-                <div key={stars} className="flex items-center gap-2">
+                <div key={stars} className="flex items-center gap-1.5 sm:gap-2">
                   <Controller
                     name="rating"
                     control={control}
@@ -267,17 +267,18 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
                         id={`${stars}stars`}
                         checked={field.value.includes(stars)}
                         onCheckedChange={() => handleCheckboxChange("rating", stars)}
+                        className="h-4 w-4 sm:h-5 sm:w-5"
                       />
                     )}
                   />
-                  <label htmlFor={`${stars}stars`}>{stars} Stars</label>
+                  <label htmlFor={`${stars}stars`} className="text-xs sm:text-sm cursor-pointer">{stars} Stars</label>
                 </div>
               ))}
             </div>
           </TabsContent>
 
-          <TabsContent value="expertise" className="space-y-4">
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <TabsContent value="expertise" className="space-y-3 sm:space-y-4">
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
               {[
                 { value: "GRANDMASTER", label: "Grandmaster" },
                 { value: "MASTER", label: "Master Craftsman" },
@@ -285,7 +286,7 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
                 { value: "APPRENTICE", label: "Apprentice" }
               ].map(
                 (level) => (
-                  <div key={level.value} className="flex items-center gap-2">
+                  <div key={level.value} className="flex items-center gap-1.5 sm:gap-2">
                     <Controller
                       name="expertise"
                       control={control}
@@ -294,10 +295,11 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
                           id={level.value}
                           checked={field.value.includes(level.value)}
                           onCheckedChange={() => handleCheckboxChange("expertise", level.value)}
+                          className="h-4 w-4 sm:h-5 sm:w-5"
                         />
                       )}
                     />
-                    <label htmlFor={level.value}>{level.label}</label>
+                    <label htmlFor={level.value} className="text-xs sm:text-sm cursor-pointer">{level.label}</label>
                   </div>
                 ),
               )}
@@ -305,7 +307,7 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
           </TabsContent>
 
           <TabsContent value="credentials">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
               {[
                 {
                   name: "education",
@@ -344,7 +346,7 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
                 },
               ].map((field) => (
                 <div key={field.label}>
-                  <label className="mb-2 block">{field.label}</label>
+                  <label className="mb-1.5 sm:mb-2 block text-xs sm:text-sm font-medium">{field.label}</label>
                   <Controller
                     name={field.name as keyof ArtisanFilterValues}
                     control={control}
@@ -353,12 +355,12 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
                         value={formField.value as string}
                         onValueChange={formField.onChange}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="text-xs sm:text-sm h-9 sm:h-10">
                           <SelectValue placeholder={`-- ${field.label} --`} />
                         </SelectTrigger>
                         <SelectContent>
                           {field.options.map((option) => (
-                            <SelectItem key={option.value} value={option.value}>
+                            <SelectItem key={option.value} value={option.value} className="text-xs sm:text-sm">
                               {option.label}
                             </SelectItem>
                           ))}
@@ -371,9 +373,9 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
             </div>
           </TabsContent>
 
-          <div className="mt-8">
-            <Button type="submit">
-              <Search className="h-4 w-4 mr-2" />
+          <div className="mt-4 sm:mt-6 md:mt-8 flex justify-center sm:justify-start">
+            <Button type="submit" className="w-full sm:w-auto text-xs sm:text-sm md:text-base px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3">
+              <Search className="h-3 w-3 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
               Find Now
             </Button>
           </div>

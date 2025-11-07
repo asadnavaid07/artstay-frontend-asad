@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function BookingPage() {
   return (
-    <div className="container py-10">
+    <div className="container mx-auto max-w-7xl py-4 sm:py-6 md:py-8 lg:py-10 xl:py-12 px-3 sm:px-4 md:px-6 lg:px-8">
       <HeadlingUnderline title="Booking" />
       <ArtisanBookingForm />
     </div>

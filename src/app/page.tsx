@@ -20,28 +20,29 @@ import SupportNetwork from "~/components/support_network/support";
 
 export default function HomePage() {
   return (
-    <>
-      <ArtisanLanding />
-      <SafariLanding />
-      <FairLanding />
-      <BusinessLanding />
-      <TourLanding />
-      <RetreatLanding/>
-      <DiningLanding/>
-      <TransitLanding/>
-      <PlannerLanding/>
-      <DocumentorLanding/>
-      <LanguageLanding/>
-      <Banner />
-      <Reviews />
-     
-      <ProjectGlimpse />
-      <div className="bg-[#C8E8F9]">
-      <Component />
+    <main className="w-full overflow-x-hidden min-w-0">
+      <div className="w-full max-w-full min-w-0">
+        <ArtisanLanding />
+        <SafariLanding />
+        <FairLanding />
+        <BusinessLanding />
+        <TourLanding />
+        <RetreatLanding/>
+        <DiningLanding/>
+        <TransitLanding/>
+        <PlannerLanding/>
+        <DocumentorLanding/>
+        <LanguageLanding/>
+        <Banner />
+        <Reviews />
+        <ProjectGlimpse />
+        <div className="bg-[#C8E8F9] w-full min-w-0 overflow-x-hidden">
+          <Component />
+        </div>
+        <PartnershipSection />
+        <SupportNetwork />
+        {/* <Footer /> */}
       </div>
-      <PartnershipSection />
-      <SupportNetwork />
-      {/* <Footer /> */}
-    </>
+    </main>
   );
 }

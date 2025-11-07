@@ -20,8 +20,8 @@ export const HotelList = () => {
   const [hotels] = api.ecoretreact.getAllHotels.useSuspenseQuery();
 
   return (
-    <div className="mx-auto max-w-7xl px-2 py-6">
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+    <div className="mx-auto max-w-7xl px-2 sm:px-4 md:px-6 py-4 sm:py-6">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
         {hotels.length > 0 ? (
           hotels.map((hotel: HotelProps) => (
             <Card
@@ -43,7 +43,7 @@ export const HotelList = () => {
                 </Badge>
 
                 {/* Image Carousel */}
-                <div className="relative h-56 overflow-hidden">
+                <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
                   {hotel.images && hotel.images.length > 0 ? (
                     <Carousel className="h-full w-full">
                       <CarouselContent>
@@ -79,15 +79,15 @@ export const HotelList = () => {
               </div>
 
               {/* Hotel Details */}
-              <div className="p-5">
+              <div className="p-4 sm:p-5 md:p-6">
                 {/* Hotel Name & Code */}
-                <h3 className="line-clamp-1 font-heading text-lg font-bold text-primary transition-colors group-hover:text-primary/80">
+                <h3 className="line-clamp-1 font-heading text-base sm:text-lg font-bold text-primary transition-colors group-hover:text-primary/80">
                   {hotel.name}
                 </h3>
 
                 {/* Manager Info */}
-                <div className="mb-3">
-                  <p className="font-text text-sm font-medium text-foreground/80">
+                <div className="mb-2 sm:mb-3">
+                  <p className="font-text text-xs sm:text-sm font-medium text-foreground/80">
                     Manager:{" "}
                     <span className="text-primary">
                       {hotel.firstName} {hotel.lastName}
@@ -96,53 +96,53 @@ export const HotelList = () => {
                 </div>
 
                 {/* Description with proper truncation */}
-                <div className="mb-4">
-                  <p className="overflow-hidden truncate font-text text-sm leading-relaxed text-muted-foreground">
+                <div className="mb-3 sm:mb-4">
+                  <p className="overflow-hidden truncate font-text text-xs sm:text-sm leading-relaxed text-muted-foreground">
                     {hotel.description}
                   </p>
                 </div>
 
                 {/* Location */}
-                <div className="mb-4 flex items-start text-muted-foreground">
-                  <MapPin className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
-                  <span className="line-clamp-2 font-text text-sm">
+                <div className="mb-3 sm:mb-4 flex items-start text-muted-foreground">
+                  <MapPin className="mr-2 mt-0.5 h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0 text-primary" />
+                  <span className="line-clamp-2 font-text text-xs sm:text-sm">
                     {hotel.address}
                   </span>
                 </div>
 
                 {/* Contact Info */}
-                <div className="mb-4 space-y-2">
+                <div className="mb-3 sm:mb-4 space-y-1.5 sm:space-y-2">
                   <div className="flex items-center text-muted-foreground">
-                    <Phone className="mr-2 h-4 w-4 flex-shrink-0 text-primary" />
-                    <span className="font-text text-sm">{hotel.phone}</span>
+                    <Phone className="mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0 text-primary" />
+                    <span className="font-text text-xs sm:text-sm">{hotel.phone}</span>
                   </div>
                   <div className="flex items-center text-muted-foreground">
-                    <Mail className="mr-2 h-4 w-4 flex-shrink-0 text-primary" />
-                    <span className="truncate font-text text-sm">
+                    <Mail className="mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0 text-primary" />
+                    <span className="truncate font-text text-xs sm:text-sm">
                       {hotel.email}
                     </span>
                   </div>
                 </div>
 
                 {/* Check-in/Check-out Times */}
-                <div className="rounded-xl border border-primary/10 bg-primary/5 p-3">
-                  <div className="flex items-center justify-between text-xs">
+                <div className="rounded-xl border border-primary/10 bg-primary/5 p-2.5 sm:p-3">
+                  <div className="flex items-center justify-between text-[10px] sm:text-xs">
                     <div className="flex items-center text-primary">
-                      <Calendar className="mr-1 h-3 w-3" />
+                      <Calendar className="mr-1 h-2.5 w-2.5 sm:h-3 sm:w-3" />
                       <span className="font-text font-medium">
                         In: {hotel.checkIn}
                       </span>
                     </div>
-                    <div className="h-4 w-px bg-primary/20"></div>
+                    <div className="h-3 sm:h-4 w-px bg-primary/20"></div>
                     <div className="flex items-center text-primary">
-                      <Calendar className="mr-1 h-3 w-3" />
+                      <Calendar className="mr-1 h-2.5 w-2.5 sm:h-3 sm:w-3" />
                       <span className="font-text font-medium">
                         Out: {hotel.checkOut}
                       </span>
                     </div>
                   </div>
                 </div>
-                <Button className="my-2 w-full" asChild>
+                <Button className="my-2 w-full text-xs sm:text-sm" asChild>
                   <Link href={`/eco-retreat/hotel?hotelId=${hotel.hotelId}`}>
                     Detail
                   </Link>
@@ -151,15 +151,15 @@ export const HotelList = () => {
             </Card>
           ))
         ) : (
-          <div className="col-span-full py-20 text-center">
-            <div className="mx-auto max-w-md">
-              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
-                <Building2 className="h-10 w-10 text-primary" />
+          <div className="col-span-full py-12 sm:py-16 md:py-20 text-center">
+            <div className="mx-auto max-w-md px-4">
+              <div className="mx-auto mb-4 sm:mb-6 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-primary/10">
+                <Building2 className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
               </div>
-              <h3 className="mb-2 font-heading text-xl font-bold text-primary">
+              <h3 className="mb-2 font-heading text-lg sm:text-xl font-bold text-primary">
                 No Hotels Available
               </h3>
-              <p className="mb-6 font-text text-muted-foreground">
+              <p className="mb-4 sm:mb-6 font-text text-sm sm:text-base text-muted-foreground">
                 We couldn&apos;t find any hotels at the moment. Please check
                 back later or contact support.
               </p>
