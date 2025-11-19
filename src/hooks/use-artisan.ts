@@ -34,51 +34,52 @@ const initialValues: PackageStoreProps = {
 
 export const usePackage = create<PackageStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       artisanPackage: initialValues,
-      setPackage: ({ id, title, amount, duration, artisanId, bookedDates, accountId }) => {
-        // Initialize startDate to today and endDate based on duration
-        let startDate = dayjs();
-        let endDate = duration ? startDate.add(duration - 1, "day") : startDate;
+      setPackage: (payload) => {
+        set((state) => {
+          const previous = state.artisanPackage;
+          const hasPackageChanged =
+            payload.id !== undefined && payload.id !== previous.id;
 
-        // If bookedDates are provided and not empty, find the next available slot
-        if (bookedDates && bookedDates.length > 0) {
-          let hasOverlap = true;
-          while (hasOverlap) {
-            hasOverlap = false;
-            for (const booked of bookedDates) {
-              const bookedStart = dayjs(booked.startDate);
-              const bookedEnd = dayjs(booked.endDate);
-              // Check if the proposed range overlaps with any booked range
-              if (
-                startDate.isBetween(bookedStart, bookedEnd, "day", "[]") ||
-                endDate.isBetween(bookedStart, bookedEnd, "day", "[]") ||
-                bookedStart.isBetween(startDate, endDate, "day", "[]") ||
-                bookedEnd.isBetween(startDate, endDate, "day", "[]")
-              ) {
-                hasOverlap = true;
-                // Move startDate to the day after the booked endDate
-                startDate = bookedEnd.add(1, "day");
-                endDate = startDate.add(duration ?? 1 - 1, "day");
-                break;
-              }
+          const next: PackageStoreProps = {
+            ...previous,
+            ...payload,
+          };
+
+          if (hasPackageChanged) {
+            next.startDate = "";
+            next.endDate = "";
+          }
+
+          if (payload.startDate) {
+            next.startDate = payload.startDate;
+          }
+
+          if (payload.duration !== undefined && !payload.startDate && next.startDate) {
+            next.endDate = dayjs(next.startDate)
+              .add(Math.max(payload.duration, 1) - 1, "day")
+              .format("YYYY-MM-DD");
+          }
+
+          if (payload.startDate) {
+            const duration = payload.duration ?? next.duration;
+            if (duration > 0) {
+              next.endDate = dayjs(payload.startDate)
+                .add(duration - 1, "day")
+                .format("YYYY-MM-DD");
             }
           }
-        }
 
-        set({
-          artisanPackage: {
-            ...get().artisanPackage,
-            id: id ?? get().artisanPackage.id,
-            title: title ?? get().artisanPackage.title,
-            amount: amount ?? get().artisanPackage.amount,
-            duration: duration ?? get().artisanPackage.duration,
-            artisanId: artisanId ?? get().artisanPackage.artisanId,
-            startDate: startDate.format("YYYY-MM-DD"),
-            endDate: endDate.format("YYYY-MM-DD"),
-            bookedDates: bookedDates ?? get().artisanPackage.bookedDates,
-            accountId: accountId ?? get().artisanPackage.accountId,
-          },
+          if (payload.endDate) {
+            next.endDate = payload.endDate;
+          }
+
+          if (!next.startDate) {
+            next.endDate = "";
+          }
+
+          return { artisanPackage: next };
         });
       },
       setClearPackage: () => set({ artisanPackage: initialValues }),

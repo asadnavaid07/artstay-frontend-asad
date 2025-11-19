@@ -16,6 +16,7 @@ export type LanguageFilterValues = {
   location: string;
   languages: string[];
   specializations: string[];
+  serviceModes: string[];
   rating: number[];
   minRate: string;
   maxRate: string;
@@ -34,6 +35,7 @@ export const LanguageFilter = () => {
       location: "",
       languages: [],
       specializations: [],
+      serviceModes: [],
       rating: [5, 4, 3, 2, 1],
       minRate: "",
       maxRate: "",
@@ -48,6 +50,7 @@ export const LanguageFilter = () => {
       const location = searchParams.get("location") ?? "";
       const languages = searchParams.getAll("language");
       const specializations = searchParams.getAll("specialization");
+      const serviceModes = searchParams.getAll("serviceMode");
       const rating = searchParams.get("rating")?.split(",").map(Number) ?? [5, 4, 3, 2, 1];
       const minRate = searchParams.get("minRate") ?? "";
       const maxRate = searchParams.get("maxRate") ?? "";
@@ -57,6 +60,7 @@ export const LanguageFilter = () => {
       setValue("location", location);
       setValue("languages", languages);
       setValue("specializations", specializations);
+      setValue("serviceModes", serviceModes);
       setValue("rating", rating);
       setValue("minRate", minRate);
       setValue("maxRate", maxRate);
@@ -68,9 +72,13 @@ export const LanguageFilter = () => {
   function handleCheckboxChange(field: "languages", value: string): void;
   function handleCheckboxChange(field: "specializations", value: string): void;
   function handleCheckboxChange(field: "availability", value: string): void;
-  function handleCheckboxChange(field: "rating" | "languages" | "specializations" | "availability", value: number | string): void {
+  function handleCheckboxChange(field: "serviceModes", value: string): void;
+  function handleCheckboxChange(
+    field: "rating" | "languages" | "specializations" | "availability" | "serviceModes",
+    value: number | string,
+  ): void {
     const currentValues = watch(field);
-    
+
     if (Array.isArray(currentValues)) {
       if (field === "rating") {
         const typedValues = currentValues as number[];
@@ -80,7 +88,7 @@ export const LanguageFilter = () => {
           : [...typedValues, value as number];
         setValue("rating", updatedValues);
       } else {
-        // Must be languages, specializations, or availability
+        // Must be languages, specializations, availability, or service modes
         const typedValues = currentValues as string[];
         const valueExists = typedValues.includes(value as string);
         const updatedValues = valueExists
@@ -106,7 +114,11 @@ export const LanguageFilter = () => {
     if (data.specializations && data.specializations.length > 0) {
       data.specializations.forEach(spec => params.append("specialization", spec));
     }
-    
+
+    if (data.serviceModes && data.serviceModes.length > 0) {
+      data.serviceModes.forEach(mode => params.append("serviceMode", mode));
+    }
+
     if (data.rating && data.rating.length > 0) {
       params.set("rating", data.rating.join(","));
     }
@@ -133,6 +145,7 @@ export const LanguageFilter = () => {
             { id: "general", label: "General" },
             { id: "languages", label: "Languages" },
             { id: "specialization", label: "Specialization" },
+            { id: "serviceMode", label: "Service Mode" },
             { id: "rating", label: "Rating" },
             { id: "availability", label: "Availability" },
           ].map((tab) => (
@@ -275,6 +288,27 @@ export const LanguageFilter = () => {
                     )}
                   />
                   <label htmlFor={`spec-${spec}`}>{spec}</label>
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="serviceMode">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              {["Online", "In-Person", "Hybrid", "Phone", "Video Call"].map((mode) => (
+                <div key={mode} className="flex items-center gap-2">
+                  <Controller
+                    name="serviceModes"
+                    control={control}
+                    render={({ field }) => (
+                      <Checkbox
+                        id={`mode-${mode}`}
+                        checked={field.value.includes(mode)}
+                        onCheckedChange={() => handleCheckboxChange("serviceModes", mode)}
+                      />
+                    )}
+                  />
+                  <label htmlFor={`mode-${mode}`}>{mode}</label>
                 </div>
               ))}
             </div>

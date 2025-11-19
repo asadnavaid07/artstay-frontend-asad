@@ -19,6 +19,7 @@ export const LanguageList = () => {
   const locationFilter = searchParams.get("location");
   const languageFilters = searchParams.getAll("language");
   const specializationFilters = searchParams.getAll("specialization");
+  const serviceModeFilters = searchParams.getAll("serviceMode");
   const ratingFilters =
     searchParams.get("rating")?.split(",").map(Number) ?? [];
   const minRateFilter = searchParams.get("minRate");
@@ -75,6 +76,18 @@ export const LanguageList = () => {
         return false;
       }
 
+      // Apply service mode filter if specified
+      if (
+        serviceModeFilters.length > 0 &&
+        !serviceModeFilters.some((filter) =>
+          service.serviceMode.some(
+            (mode) => mode.toLowerCase() === filter.toLowerCase(),
+          ),
+        )
+      ) {
+        return false;
+      }
+
       // Apply rating filter if specified
       if (
         ratingFilters.length > 0 &&
@@ -109,6 +122,7 @@ export const LanguageList = () => {
     (locationFilter ?? false) ||
     languageFilters.length > 0 ||
     specializationFilters.length > 0 ||
+    serviceModeFilters.length > 0 ||
     ratingFilters.length > 0 ||
     (minRateFilter ?? false) ||
     (maxRateFilter ?? false) ||
