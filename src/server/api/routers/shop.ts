@@ -204,6 +204,7 @@ export const shopRouter = createTRPCRouter({
         phone: z.string().min(10),
         address: z.string().min(5),
         city: z.string().min(2),
+        postalCode: z.string().min(3),
         additionalNote: z.string().optional(),
         subtotal: z.number(),
         tax: z.number(),

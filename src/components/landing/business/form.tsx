@@ -343,20 +343,18 @@ export const BusinessForm = () => {
                   Preferred location
                 </FormLabel>
                 <FormControl>
-                  <>
-                    <Input
-                      list="shop-location-suggestions"
-                      placeholder="Start typing a city, state or country..."
-                      className="h-10"
-                      {...field}
-                    />
-                    <datalist id="shop-location-suggestions">
-                      {locationSuggestions.map((location) => (
-                        <option key={location} value={location} />
-                      ))}
-                    </datalist>
-                  </>
+                  <Input
+                    list="shop-location-suggestions"
+                    placeholder="Start typing a city, state or country..."
+                    className="h-10"
+                    {...field}
+                  />
                 </FormControl>
+                <datalist id="shop-location-suggestions">
+                  {locationSuggestions.map((location) => (
+                    <option key={location} value={location} />
+                  ))}
+                </datalist>
                 <FormMessage className="text-xs" />
               </FormItem>
             )}

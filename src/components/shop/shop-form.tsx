@@ -33,6 +33,7 @@ export const shopCheckoutFormSchema = z.object({
   phone: z.string().min(10, "Phone number must be at least 10 digits"),
   address: z.string().min(5, "Address must be at least 5 characters"),
   city: z.string().min(2, "City must be at least 2 characters"),
+  postalCode: z.string().min(3, "Postal code must be at least 3 characters"),
   additionalNotes: z.string().optional(),
 });
 
@@ -60,6 +61,7 @@ export const ShopCheckoutForm = () => {
       phone: "",
       address: "",
       city: "",
+      postalCode: "",
       additionalNotes: "",
     },
   });
@@ -96,6 +98,7 @@ export const ShopCheckoutForm = () => {
       phone: data.phone,
       address: data.address,
       city: data.city,
+      postalCode: data.postalCode,
       shopId: shopId ?? "",
       additionalNote: data.additionalNotes ?? "",
       items: orderItems,
@@ -179,20 +182,20 @@ export const ShopCheckoutForm = () => {
               />
             </div>
 
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="123 Main St" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div className="grid gap-4 md:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Address</FormLabel>
-                    <FormControl>
-                      <Input placeholder="123 Main St" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="city"
@@ -201,6 +204,19 @@ export const ShopCheckoutForm = () => {
                     <FormLabel>City</FormLabel>
                     <FormControl>
                       <Input placeholder="New York" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="postalCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Postal Code</FormLabel>
+                    <FormControl>
+                      <Input placeholder="10001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

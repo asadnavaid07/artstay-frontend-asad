@@ -56,24 +56,20 @@ export const FairCalendar = () => {
     // Current month's days
     for (let i = 1; i <= daysInMonth; i++) {
       const currentDayDate = firstDayOfMonth.add(i - 1, "day");
-      
-      // For fair events, check if the date is within the event period
-      let isDisabled = currentDayDate.isBefore(currentDate, "day"); // Disable if date is before today
-      
+
+      let isDisabled = true;
       if (fairEvent.event) {
         const eventStart = dayjs(fairEvent.event.startDate);
         const eventEnd = dayjs(fairEvent.event.endDate);
-        
-        // Only enable dates that fall within the event period
-        if (!isDisabled && !currentDayDate.isBetween(eventStart, eventEnd, 'day', '[]')) {
-          isDisabled = true;
+        if (currentDayDate.isBetween(eventStart, eventEnd, "day", "[]")) {
+          isDisabled = false;
         }
       }
-      
+
       days.push({
         date: currentDayDate,
         isCurrentMonth: true,
-        isDisabled: isDisabled,
+        isDisabled,
       });
     }
 

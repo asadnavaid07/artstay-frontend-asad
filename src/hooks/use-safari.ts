@@ -25,16 +25,18 @@ export const useSafari = create<SafariPackageStore>()(
   persist(
     (set) => ({
       safariPackage: initialValues,
-      setPackage: (safariPackage) => set((state) => ({ 
-        safariPackage: { ...state.safariPackage, ...safariPackage } 
-      })),
-      setTour: (tour) => set((state) => ({ 
-        safariPackage: { 
-          ...state.safariPackage, 
-          id: tour.tourId,
-          tour: tour
-        } 
-      })),
+      setPackage: (safariPackage) =>
+        set((state) => ({
+          safariPackage: { ...state.safariPackage, ...safariPackage },
+        })),
+      setTour: (tour) =>
+        set(() => ({
+          safariPackage: {
+            id: tour.tourId,
+            tour,
+            date: "",
+          },
+        })),
       clearPackage: () => set({ safariPackage: initialValues })
     }),
     {

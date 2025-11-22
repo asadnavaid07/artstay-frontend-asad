@@ -3,6 +3,7 @@
 import { useFairEvent } from "~/hooks/use-fair";
 import { Button } from "~/components/ui/button";
 import type { FairEventProps } from "~/types";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface FairEventBookProps {
   event: FairEventProps;
@@ -10,10 +11,16 @@ interface FairEventBookProps {
 
 export const FairEventBook = ({ event }: FairEventBookProps) => {
   const { setEvent } = useFairEvent();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleRegisterNow = () => {
-    // Save the selected event in the store
     setEvent(event);
+    const fairIdFromParam = searchParams.get("fairId") ?? event.fairId;
+    const query = new URLSearchParams();
+    query.set("fairId", fairIdFromParam);
+    query.set("tab", "book");
+    router.push(`/fair/profile?${query.toString()}`);
   };
 
   return (

@@ -128,6 +128,18 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
     router.push(`${pathname}?${params.toString()}`);
   };
 
+  const handleReset = () => {
+    setValue("craft", "");
+    setValue("subCraft", "");
+    setValue("rating", [5, 4, 3, 2, 1]);
+    setValue("expertise", ["GRANDMASTER", "MASTER", "CRAFTMAN", "APPRENTICE"]);
+    setValue("education", "");
+    setValue("training", "");
+    setValue("certification", "");
+    setValue("recognition", "");
+    router.push(pathname);
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="-mt-8 sm:-mt-12 md:-mt-16 lg:-mt-20 xl:-mt-24 px-2 sm:px-3 md:px-4 lg:px-6">
       <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -137,9 +149,9 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
           </div>
           {[
             { id: "craft", label: "Craft" },
-            { id: "expertise", label: "Expertise" },
-            { id: "rating", label: "Rating" },
-            { id: "credentials", label: "Credentials" },
+            // { id: "expertise", label: "Expertise" },
+            // { id: "rating", label: "Rating" },
+            // { id: "credentials", label: "Credentials" },
           ].map((tab) => (
             <TabsTrigger
               key={tab.id}
@@ -373,10 +385,18 @@ function handleCheckboxChange(field: "rating" | "expertise", value: number | str
             </div>
           </TabsContent>
 
-          <div className="mt-4 sm:mt-6 md:mt-8 flex justify-center sm:justify-start">
+          <div className="mt-4 sm:mt-6 md:mt-8 flex flex-col sm:flex-row gap-2 sm:gap-3">
             <Button type="submit" className="w-full sm:w-auto text-xs sm:text-sm md:text-base px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3">
               <Search className="h-3 w-3 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
               Find Now
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full sm:w-auto text-xs sm:text-sm md:text-base px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3"
+              onClick={handleReset}
+            >
+              Reset Filters
             </Button>
           </div>
         </div>

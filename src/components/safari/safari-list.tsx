@@ -9,18 +9,31 @@ import { Card } from "~/components/ui/card";
 import { MapPin } from "lucide-react";
 import type { SafariProps, SafariTourProps } from "~/types";
 
+const getSafeImageSrc = (src?: string | null) => {
+  if (!src) return "/placeholder.png";
+  const trimmed = src.trim();
+  if (!trimmed) return "/placeholder.png";
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+    return trimmed;
+  }
+  if (trimmed.startsWith("/")) {
+    return trimmed;
+  }
+  return "/placeholder.png";
+};
+
 export const SafariList = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   
   // Extract filter values from search params
-  const craftVillagesFilter = useMemo(() => 
-    searchParams.get("craftVillages")?.split(",") ?? [], 
-    [searchParams]
+  const craftVillageFilter = useMemo(
+    () => searchParams.get("craftVillage")?.trim() ?? "",
+    [searchParams],
   );
-  const featuresFilter = useMemo(() => 
-    searchParams.get("features")?.split(",") ?? [], 
-    [searchParams]
+  const featureFilter = useMemo(
+    () => searchParams.get("feature")?.trim() ?? "",
+    [searchParams],
   );
 
   // Fetch all safaris
@@ -28,8 +41,7 @@ export const SafariList = () => {
 
   // Apply filters to safaris
   const filteredSafaris = useMemo(() => {
-    // If no filters are applied, return all safaris
-    if (craftVillagesFilter.length === 0 && featuresFilter.length === 0) {
+    if (!craftVillageFilter && !featureFilter) {
       return safaris;
     }
 
@@ -41,40 +53,35 @@ export const SafariList = () => {
       }
 
       // Check craft villages filter
-      if (craftVillagesFilter.length > 0) {
-        const hasMatchingVillage = tours.some((tour: SafariTourProps) => {
-          return craftVillagesFilter.some((village: string) => {
-            // Handle combined village names like "Khanqah & Zadibal"
-            if (village.includes('&')) {
-              const villageParts = village.split('&').map((part: string) => part.trim().toLowerCase());
-              return villageParts.some((part: string) => tour.title.toLowerCase().includes(part));
-            } else if (village.includes(',')) {
-              const villageParts = village.split(',').map((part: string) => part.trim().toLowerCase());
-              return villageParts.some((part: string) => tour.title.toLowerCase().includes(part));
-            } else {
-              return tour.title.toLowerCase().includes(village.toLowerCase());
-            }
-          });
-        });
+      if (craftVillageFilter) {
+        const normalizedVillageParts = craftVillageFilter
+          .replace(/&/g, ",")
+          .split(",")
+          .map((part) => part.trim().toLowerCase())
+          .filter(Boolean);
+
+        const hasMatchingVillage = tours.some((tour: SafariTourProps) =>
+          normalizedVillageParts.some((part) =>
+            tour.title.toLowerCase().includes(part),
+          ),
+        );
+
         if (!hasMatchingVillage) return false;
       }
 
-      // Check features filter (activity preferences)
-      if (featuresFilter.length > 0) {
-        const hasMatchingFeature = tours.some((tour: SafariTourProps) => {
-          return featuresFilter.some((feature: string) => {
-            // Check if any tour feature contains the selected activity preference
-            return tour.features.some((tourFeature: string) => 
-              tourFeature.toLowerCase().includes(feature.toLowerCase())
-            );
-          });
-        });
+      if (featureFilter) {
+        const normalizedFeature = featureFilter.toLowerCase();
+        const hasMatchingFeature = tours.some((tour: SafariTourProps) =>
+          tour.features.some((tourFeature) =>
+            tourFeature.toLowerCase().includes(normalizedFeature),
+          ),
+        );
         if (!hasMatchingFeature) return false;
       }
 
       return true;
     });
-  }, [safaris, craftVillagesFilter, featuresFilter]);
+  }, [safaris, craftVillageFilter, featureFilter]);
 
   return (
     <div className="px-2 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
@@ -93,7 +100,7 @@ export const SafariList = () => {
 
                 <div className="relative h-48 sm:h-56 md:h-64 lg:h-72">
                   <Image
-                    src={safari.dp === '' ? '/placeholder.png' : safari.dp}
+                    src={getSafeImageSrc(safari.dp)}
                     alt={`${safari.firstName} ${safari.lastName}`}
                     fill
                     className="object-cover"

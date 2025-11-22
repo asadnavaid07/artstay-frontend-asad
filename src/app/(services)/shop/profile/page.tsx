@@ -566,13 +566,6 @@ export default async function ShopPage({ searchParams }: PageProps) {
                 </div>
               </div>
             </div>
-
-            <div className="rounded-lg bg-white p-6 shadow-lg">
-              <h3 className="mb-6 text-xl font-semibold text-gray-900">
-                Send a Message
-              </h3>
-              {/* <ContactForm shopId={shop.shopId} shopName={shop.shopName} /> */}
-            </div>
           </div>
         </TabsContent>
       </div>

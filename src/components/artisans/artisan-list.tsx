@@ -7,6 +7,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import type { ArtisanDetailProps } from "~/types";
 
+const getSafeImageSrc = (src?: string | null): string => {
+  if (!src) return "/placeholder.png";
+  const trimmed = src.trim();
+  if (trimmed.length === 0) return "/placeholder.png";
+  const isAbsolute = /^https?:\/\//i.test(trimmed);
+  const isRootRelative = trimmed.startsWith("/");
+  return isAbsolute || isRootRelative ? trimmed : "/placeholder.png";
+};
+
 export const ArtisanList = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -90,11 +99,12 @@ const filteredArtisans = useMemo(() => {
             {/* Image Container with Overlay */}
             <div className="relative h-64 w-full overflow-hidden">
               <Image
-                src={artisan.dp == "" ? "/placeholder.png" : artisan.dp}
+                src={getSafeImageSrc(artisan.dp)}
                 alt={`${artisan.firstName} ${artisan.lastName}`}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-110"
                 sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                priority={index < 6}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             </div>
