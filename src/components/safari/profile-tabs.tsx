@@ -16,6 +16,7 @@ import { SafariPackage } from "~/components/safari/package-list";
 import { SafariCalendar } from "~/components/safari/booking/safari-calendar";
 import type { SafariDetailProps } from "~/types";
 import { useSearchParams } from "next/navigation";
+import { getSafeImageSrc } from "~/lib/utils";
 
 type SafariProfileTabsProps = {
   safari: SafariDetailProps;
@@ -54,7 +55,7 @@ export const SafariProfileTabs = ({
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 w-full">
           <div className="relative -mt-16 sm:-mt-20 md:-mt-24 lg:-mt-28 h-32 w-32 sm:h-36 sm:w-36 md:h-40 md:w-40 lg:h-44 lg:w-44 overflow-hidden rounded-lg shadow-xl flex-shrink-0 border-3 sm:border-4 border-white bg-white z-20">
             <Image
-              src={safari.dp}
+              src={getSafeImageSrc(safari.dp)}
               alt="Profile photo"
               priority
               className="rounded-lg object-cover"

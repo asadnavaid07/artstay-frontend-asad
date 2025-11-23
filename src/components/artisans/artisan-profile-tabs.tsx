@@ -287,6 +287,7 @@ import {
   getExperienceString,
   getRecognitionString,
   getTrainingString,
+  getSafeImageSrc,
 } from "~/lib/utils";
 import type { ArtisanPortolioProps, ExperienceEnum, TraingEducationEnum, CertificationEnum, RecongnitionEnum } from "~/types";
 
@@ -328,7 +329,7 @@ export const ArtisanProfileTabs = ({ artisan }: ArtisanProfileTabsProps) => {
           {/* Profile Image */}
           <div className="relative -mt-16 sm:-mt-20 md:-mt-24 lg:-mt-28 h-32 w-32 sm:h-36 sm:w-36 md:h-40 md:w-40 lg:h-44 lg:w-44 overflow-hidden rounded-lg shadow-xl flex-shrink-0 border-3 sm:border-4 border-white bg-white z-20">
             <Image
-              src={!artisan?.dp || artisan?.dp === "" ? "/placeholder.png" : artisan.dp}
+              src={getSafeImageSrc(artisan?.dp)}
               alt="Profile photo"
               priority
               className="rounded-lg object-cover"
@@ -451,41 +452,7 @@ export const ArtisanProfileTabs = ({ artisan }: ArtisanProfileTabsProps) => {
           </div>
 
           {/* Skills and Expertise */}
-          <div className="grid gap-4 sm:gap-5 md:gap-6 md:grid-cols-2">
-            <div className="space-y-3">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <BookOpen className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
-                <span>Specializations</span>
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {artisan?.specialization?.map((spec, index) => (
-                  <span
-                    key={index}
-                    className="rounded-full bg-primary/10 px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm text-primary font-medium"
-                  >
-                    {spec}
-                  </span>
-                )) || <span className="text-xs sm:text-sm text-gray-500">No specializations listed</span>}
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <Star className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
-                <span>Craft Focus Areas</span>
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {artisan?.craftFocusAreas?.map((area, index) => (
-                  <span
-                    key={index}
-                    className="rounded-full bg-secondary/10 px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm text-secondary font-medium"
-                  >
-                    {area}
-                  </span>
-                )) || <span className="text-xs sm:text-sm text-gray-500">No craft focus areas listed</span>}
-              </div>
-            </div>
-          </div>
+          
         </TabsContent>
 
         {/* Portfolio Tab */}
@@ -499,7 +466,7 @@ export const ArtisanProfileTabs = ({ artisan }: ArtisanProfileTabsProps) => {
               >
                 <div className="relative h-44 sm:h-48 md:h-52 lg:h-56 w-full">
                   <Image
-                    src={image}
+                    src={getSafeImageSrc(image)}
                     alt={`Portfolio image ${index + 1}`}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 50vw, 33vw"

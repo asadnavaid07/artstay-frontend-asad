@@ -175,10 +175,7 @@ export default async function FairPage({ searchParams }: PageProps) {
   const fair: FairDetailProps = await api.fair.getFairDetail({
     fairId,
   });
-  const initialTab =
-    paramProps.tab === "events" || paramProps.tab === "book"
-      ? paramProps.tab
-      : "general";
+  const initialTab = paramProps.tab === "events" ? "events" : "general";
 
   return <FairProfileTabs fair={fair} initialTab={initialTab} />;
 }

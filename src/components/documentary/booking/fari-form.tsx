@@ -34,6 +34,9 @@ export const bookingFormSchema = z.object({
   lastName: z.string().min(2, "Last name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address"),
   phone: z.string().min(10, "Phone number must be at least 10 digits"),
+  address: z.string().min(5, "Address must be at least 5 characters"),
+  city: z.string().min(2, "City must be at least 2 characters"),
+  postalCode: z.string().min(4, "Postal code must be at least 4 characters"),
   numberOfTickets: z.number().min(1, "At least 1 ticket is required"),
   ticketType: z.enum(["general", "vip", "student"]),
   additionalNotes: z.string().optional(),
@@ -53,7 +56,7 @@ export const FairBookingForm = () => {
         description: "Fair tickets booked successfully",
       });
       clearEvent();
-      router.push("/bookings/confirmation");
+      router.push("/");
     },
     onError: (error) => {
       toast({
@@ -71,20 +74,23 @@ export const FairBookingForm = () => {
       lastName: "",
       email: "",
       phone: "",
+      address: "",
+      city: "",
+      postalCode: "",
       numberOfTickets: 1,
       ticketType: "general",
       additionalNotes: "",
     },
   });
 
-  if (!fairEvent.event || !fairEvent.date) {
+  if (!fairEvent.event) {
     return (
       <div className="flex flex-col items-center justify-center py-10">
         <h2 className="text-2xl font-semibold tracking-tight">
           No Fair Event Selected
         </h2>
         <p className="mt-2 text-muted-foreground">
-          Please select a fair event and date to continue booking
+          Please select a fair event to continue booking
         </p>
         <Button
           className="mt-4"
@@ -103,20 +109,35 @@ export const FairBookingForm = () => {
   };
 
   const onSubmit = async (data: FairBookingFormValues) => {
+    if (!fairEvent.event) {
+      toast({
+        title: "Error",
+        description: "No event selected. Please go back and select an event.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const ticketPrice = ticketPrices[data.ticketType];
     const totalAmount = ticketPrice * data.numberOfTickets;
+    
+    // Use event.startDate as eventDate since fairs are on specific dates
+    const eventDate = fairEvent.event.startDate;
     
     createBooking.mutate({
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
       phone: data.phone,
+      address: data.address,
+      city: data.city,
+      postalCode: data.postalCode,
       numberOfTickets: data.numberOfTickets,
       ticketType: data.ticketType,
       additionalNote: data.additionalNotes ?? "",
-      eventDate: fairEvent.date,
-      eventId: fairEvent.event?.eventId ??'',
-      fairId: fairEvent.event?.fairId ?? '',
+      eventDate: eventDate,
+      eventId: fairEvent.event.eventId,
+      fairId: fairEvent.event.fairId,
       totalAmount: totalAmount,
     });
   };
@@ -193,6 +214,49 @@ export const FairBookingForm = () => {
                         <FormLabel>Phone</FormLabel>
                         <FormControl>
                           <Input placeholder="+1 (555) 123-4567" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="address"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Address</FormLabel>
+                      <FormControl>
+                        <Input placeholder="123 Main Street, Apartment 4B" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <FormField
+                    control={form.control}
+                    name="city"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>City</FormLabel>
+                        <FormControl>
+                          <Input placeholder="New York" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="postalCode"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Postal Code</FormLabel>
+                        <FormControl>
+                          <Input placeholder="10001" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -313,9 +377,9 @@ export const FairBookingForm = () => {
 
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <p className="text-muted-foreground">Visit Date</p>
+                <p className="text-muted-foreground">Event Date</p>
                 <p className="font-medium">
-                  {dayjs(fairEvent.date).format("DD MMM YYYY")}
+                  {dayjs(fairEvent.event.startDate).format("DD MMM YYYY")}
                 </p>
               </div>
               <div className="flex justify-between text-sm">

@@ -27,7 +27,8 @@ export const useFairEvent = create<FairEventStore>()((set) => ({
     fairEvent: { 
       id: event.eventId,
       event: event,
-      date: ''
+      // Automatically set date to event's startDate since fairs are on specific dates
+      date: event.startDate
     }
   }),
   setDate: (date) => set((state) => ({

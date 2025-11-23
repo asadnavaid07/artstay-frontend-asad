@@ -140,7 +140,7 @@ export const Banner = ({ banner }: ComponentProps) => {
   };
 
   return (
-    <section className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[calc(80dvh)] overflow-hidden bg-primary">
+    <section className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[calc(80dvh)] overflow-hidden bg-primary z-0">
       {/* Background image with overlay */}
       <div className="absolute inset-0 z-0">
         <Image

@@ -15,17 +15,15 @@ import { HeadlingUnderline } from "~/components/common/heading-underline";
 import { FairEvent } from "~/components/fair/fair-event";
 import type { FairDetailProps } from "~/types";
 import { useSearchParams } from "next/navigation";
-import { FairCalendar } from "~/components/fair/booking/fair-calendar";
-import { FairSelectionSummary } from "~/components/fair/booking/fair-selection-summary";
-
+import { getSafeImageSrc } from "~/lib/utils";
 type FairProfileTabsProps = {
   fair: FairDetailProps;
-  initialTab?: "general" | "events" | "book";
+  initialTab?: "general" | "events";
 };
 
 const sanitizeTab = (tab?: string | null) => {
   if (!tab) return "general";
-  if (tab === "events" || tab === "book" || tab === "general") {
+  if (tab === "events" || tab === "general") {
     return tab;
   }
   return "general";
@@ -36,9 +34,9 @@ export const FairProfileTabs = ({
   initialTab = "general",
 }: FairProfileTabsProps) => {
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState<
-    "general" | "events" | "book"
-  >(sanitizeTab(initialTab));
+  const [activeTab, setActiveTab] = useState<"general" | "events">(
+    sanitizeTab(initialTab)
+  );
 
   useEffect(() => {
     const tabFromParams = sanitizeTab(searchParams.get("tab"));
@@ -51,11 +49,11 @@ export const FairProfileTabs = ({
       onValueChange={(val) => setActiveTab(val as typeof activeTab)}
       className="w-full"
     >
-      <div className="relative flex flex-col items-center pb-6">
-        <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-center md:items-end w-full px-4 md:px-0">
-          <div className="relative -mt-0 md:-mt-[14rem] h-[12rem] w-[12rem] sm:h-[15rem] sm:w-[15rem] overflow-hidden rounded-lg shadow-lg flex-shrink-0">
+      <div className="relative flex flex-col items-center pb-6 z-[100]">
+        <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-center md:items-end w-full px-4 md:px-0 relative z-[100]">
+          <div className="relative -mt-0 md:-mt-[14rem] h-[12rem] w-[12rem] sm:h-[15rem] sm:w-[15rem] overflow-hidden rounded-lg shadow-lg flex-shrink-0 z-[100]">
             <Image
-              src={fair.dp}
+              src={getSafeImageSrc(fair.dp)}
               alt="Profile photo"
               priority
               className="rounded-lg object-cover"
@@ -68,16 +66,15 @@ export const FairProfileTabs = ({
               </h2>
             </div>
           </div>
-          <TabsList className="relative -mt-0 md:-mt-[12rem] flex h-auto flex-wrap items-center md:items-end justify-center md:justify-end gap-2 bg-transparent p-0 w-full md:w-auto">
+          <TabsList className="relative -mt-0 md:-mt-[12rem] flex h-auto flex-wrap items-center md:items-end justify-center md:justify-end gap-2 bg-transparent p-0 w-full md:w-auto z-[100]">
             {[
               { id: "general", label: "General Info." },
               { id: "events", label: "Fair Events" },
-              { id: "book", label: "Register" },
             ].map((tab) => (
               <TabsTrigger
                 key={tab.id}
                 value={tab.id}
-                className="rounded-b-none rounded-t-lg bg-gray-200 px-3 sm:px-4 py-2 font-text text-sm sm:text-lg text-gray-950 backdrop-blur hover:bg-primary hover:text-white data-[state=active]:bg-primary data-[state=active]:text-white"
+                className="rounded-b-none rounded-t-lg bg-gray-200 px-3 sm:px-4 py-2 font-text text-sm sm:text-lg text-gray-950 backdrop-blur hover:bg-primary hover:text-white data-[state=active]:bg-primary data-[state=active]:text-white relative z-[100]"
               >
                 <span className="mr-2">+</span>
                 {tab.label}
@@ -174,12 +171,6 @@ export const FairProfileTabs = ({
           {fair.FairEvent.map((event) => (
             <FairEvent event={event} key={event.eventId} />
           ))}
-        </TabsContent>
-
-        <TabsContent value="book" className="grid gap-6">
-          <HeadlingUnderline title="Register" />
-          <FairCalendar />
-          <FairSelectionSummary />
         </TabsContent>
       </div>
     </Tabs>

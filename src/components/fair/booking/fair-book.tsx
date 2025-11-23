@@ -15,12 +15,10 @@ export const FairEventBook = ({ event }: FairEventBookProps) => {
   const searchParams = useSearchParams();
 
   const handleRegisterNow = () => {
+    // Set event in Zustand store with eventDate automatically set to event.startDate
     setEvent(event);
-    const fairIdFromParam = searchParams.get("fairId") ?? event.fairId;
-    const query = new URLSearchParams();
-    query.set("fairId", fairIdFromParam);
-    query.set("tab", "book");
-    router.push(`/fair/profile?${query.toString()}`);
+    // Redirect directly to booking form
+    router.push("/fair/booking");
   };
 
   return (
